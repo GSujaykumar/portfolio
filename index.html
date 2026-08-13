@@ -1,10 +1,36 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>my-portfolio</title>
+    <meta name="theme-color" content="#0a1210" />
+    <meta name="color-scheme" content="light dark" />
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('portfolio-theme');
+          if (t !== 'dark' && t !== 'light') {
+            t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          document.documentElement.setAttribute('data-theme', t);
+        } catch (e) {}
+      })();
+    </script>
+    <title>Sujay Kumar | Backend Java · Spring Boot · Oracle Fusion</title>
+    <meta name="description" content="Backend Java developer (2 yrs) — Spring Boot microservices, JWT APIs, Docker/Jenkins, Kafka outbox patterns, and Oracle Fusion finance-ops automation at Varsity. Hyderabad." />
+    <meta name="author" content="Sujay Kumar Gaddam" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Sujay Kumar | Backend Java Developer" />
+    <meta property="og:description" content="Spring Boot microservices, observable backends, and Oracle Fusion ops platforms — production work from Varsity." />
+    <meta property="og:image" content="/favicon.svg" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Sujay Kumar | Backend Java Developer" />
+    <meta name="twitter:description" content="Spring Boot · Microservices · Oracle Fusion · Kafka · Docker · Jenkins" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
   </head>
   <body>
     <div id="root"></div>

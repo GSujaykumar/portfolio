@@ -1,76 +1,66 @@
 import { motion } from 'framer-motion'
-
-const ExperienceItem = ({ role, company, period, description, index }) => {
-    return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.2, duration: 0.8 }}
-            className="relative pl-8 md:pl-12 border-l border-white/10 pb-12 last:pb-0"
-        >
-            <div className="absolute left-[-5px] top-0 w-2.5 h-2.5 bg-white rounded-full ring-4 ring-black" />
-
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
-                <div>
-                    <h3 className="text-2xl font-bold text-white">{role}</h3>
-                    <div className="text-lg text-gray-400 font-medium">{company}</div>
-                </div>
-                <div className="text-sm font-mono text-gray-500 mt-2 sm:mt-0 uppercase tracking-wider bg-white/5 px-3 py-1 rounded-full w-fit">
-                    {period}
-                </div>
-            </div>
-
-            <div className="text-gray-400 leading-relaxed font-light space-y-4 max-w-3xl">
-                {description.map((item, i) => (
-                    <p key={i} className="relative pl-4">
-                        <span className="absolute left-0 top-2.5 w-1 h-1 bg-gray-600 rounded-full"></span>
-                        {item}
-                    </p>
-                ))}
-            </div>
-        </motion.div>
-    )
-}
+import { SectionTitle } from './motion/Reveal'
+import PageReveal from './motion/PageReveal'
+import { easeOut, springStamp, viewportOnce } from '../lib/motion'
 
 const Experience = () => {
-    const experiences = [
-        {
-            role: "Full Stack Developer",
-            company: "Varsity Edification Management",
-            period: "2024 — Present",
-            description: [
-                "Architected and maintained scalable microservices using Spring Boot, integrating complex business logic with high-performance requirements.",
-                "Spearheaded layout and functionality overhauls in React & Angular, implementing secure JWT authentication flows and optimizing state management.",
-                "Reduced API latency by 40% through efficient query optimization and caching strategies.",
-                "Collaborated with cross-functional teams to deliver robust features in an Agile environment."
-            ]
-        }
-    ]
+  const exp = {
+    role: 'Software Engineer (Backend)',
+    company: 'Varsity Edification Management Pvt. Ltd.',
+    period: '2024 — Present',
+    location: 'Hyderabad, India',
+    description: [
+      'Own Spring Boot microservices end-to-end — REST APIs, JWT / Spring Security, JPA, and release ownership.',
+      'Cut critical MySQL / PostgreSQL query time ~25% with indexing and query rewrites.',
+      'Ship Docker images through Jenkins on Azure with Prometheus, Grafana, and Zipkin in the loop.',
+      'Built Oracle Fusion finance-ops automation: Segment 3/5, GL updates, remarks, API runners, mail bridges.',
+      'Daily collection checker posts one Teams Adaptive Card — STATUS OK or CRITICAL — without manual checks.',
+      'Operators get a live Fusion Console: drop Excel → SQL / upload outputs with clear filenames.',
+    ],
+  }
 
-    return (
-        <section id="experience" className="py-32 px-6 md:px-20 bg-[#060606] relative z-10 border-t border-white/5">
-            <div className="max-w-7xl mx-auto">
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="mb-20"
-                >
-                    <h2 className="text-4xl md:text-5xl text-white font-bold tracking-tighter mb-6">PROFESSIONAL HISTORY</h2>
-                    <p className="text-gray-400 max-w-xl text-lg">
-                        My journey in the tech industry, building impactful solutions.
-                    </p>
-                </motion.div>
+  return (
+    <section id="experience" className="py-24 md:py-32">
+      <div className="mx-auto max-w-6xl px-6 md:px-10">
+        <div className="mb-12">
+          <SectionTitle label="Experience" title="Work" />
+        </div>
 
-                <div className="space-y-4">
-                    {experiences.map((exp, index) => (
-                        <ExperienceItem key={index} {...exp} index={index} />
-                    ))}
-                </div>
+        <PageReveal>
+          <motion.article
+            whileHover={{ y: -6 }}
+            transition={springStamp}
+            className="soft-panel p-8 hover:shadow-2xl md:p-10"
+          >
+            <div className="grid gap-8 md:grid-cols-12">
+              <div className="md:col-span-4">
+                <p className="font-mono text-xs uppercase tracking-[0.18em] text-[var(--text-faint)]">
+                  {exp.period}
+                </p>
+                <h3 className="mt-3 font-display text-2xl text-[var(--ink)]">{exp.role}</h3>
+                <p className="mt-2 text-[var(--text-muted)]">{exp.company}</p>
+                <p className="mt-1 text-sm text-[var(--text-faint)]">{exp.location}</p>
+              </div>
+              <ul className="space-y-4 md:col-span-8">
+                {exp.description.map((item, i) => (
+                  <motion.li
+                    key={item}
+                    initial={{ opacity: 0, x: -16 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={viewportOnce}
+                    transition={{ delay: 0.05 + i * 0.05, duration: 0.4, ease: easeOut }}
+                    className="relative pl-5 text-[var(--text-muted)] leading-relaxed before:absolute before:left-0 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-[var(--ink)]"
+                  >
+                    {item}
+                  </motion.li>
+                ))}
+              </ul>
             </div>
-        </section>
-    )
+          </motion.article>
+        </PageReveal>
+      </div>
+    </section>
+  )
 }
 
 export default Experience

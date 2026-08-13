@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Guide options — pick one</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #f4f7f5;
+        --ink: #0a1210;
+        --signal: #00c9a0;
+        --hot: #ff6b4a;
+        --muted: #5a6b64;
+        --card: #ffffff;
+        --line: #d5e0db;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: Sora, system-ui, sans-serif;
+        background:
+          radial-gradient(900px 500px at 10% -10%, color-mix(in srgb, var(--signal) 28%, transparent), transparent 60%),
+          radial-gradient(800px 480px at 100% 0%, color-mix(in srgb, var(--hot) 18%, transparent), transparent 55%),
+          var(--bg);
+        color: var(--ink);
+        min-height: 100vh;
+        padding: 32px 20px 80px;
+      }
+      .wrap { max-width: 980px; margin: 0 auto; }
+      h1 {
+        font-family: Syne, sans-serif;
+        font-size: clamp(2rem, 6vw, 3.4rem);
+        line-height: 0.95;
+        letter-spacing: -0.02em;
+        margin: 0 0 10px;
+      }
+      .sub { color: var(--muted); max-width: 42rem; margin: 0 0 28px; }
+      .section {
+        margin-top: 34px;
+      }
+      .section h2 {
+        font-family: Syne, sans-serif;
+        font-size: 1.15rem;
+        margin: 0 0 14px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .section h2 span {
+        font-family: Sora, sans-serif;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--muted);
+        border: 1px solid var(--line);
+        background: var(--card);
+        border-radius: 999px;
+        padding: 4px 10px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 12px;
+      }
+      .card {
+        appearance: none;
+        border: 2px solid var(--line);
+        background: var(--card);
+        border-radius: 18px;
+        padding: 18px 12px 14px;
+        cursor: pointer;
+        text-align: center;
+        transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+        font: inherit;
+        color: inherit;
+      }
+      .card:hover { transform: translateY(-4px); border-color: var(--ink); }
+      .card.selected {
+        border-color: var(--signal);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--signal) 30%, transparent);
+      }
+      .emoji {
+        font-size: 2.8rem;
+        line-height: 1;
+        display: block;
+        margin-bottom: 10px;
+        filter: drop-shadow(0 6px 10px rgba(0,0,0,0.08));
+      }
+      .name { font-weight: 700; font-size: 0.92rem; }
+      .tag {
+        margin-top: 4px;
+        font-size: 0.72rem;
+        color: var(--muted);
+      }
+      .preview {
+        position: sticky;
+        bottom: 16px;
+        margin-top: 28px;
+        border: 2px solid var(--ink);
+        background: var(--ink);
+        color: #f4f7f5;
+        border-radius: 22px;
+        padding: 18px 20px;
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        box-shadow: 0 20px 50px rgba(10, 18, 16, 0.28);
+      }
+      .preview .bubble {
+        flex: 1;
+        background: color-mix(in srgb, #fff 10%, transparent);
+        border-radius: 14px;
+        padding: 12px 14px;
+        font-size: 0.92rem;
+      }
+      .preview .big {
+        font-size: 3rem;
+        line-height: 1;
+        width: 72px;
+        height: 72px;
+        display: grid;
+        place-items: center;
+        background: #12201c;
+        border-radius: 18px;
+      }
+      .preview code {
+        display: block;
+        margin-top: 8px;
+        font-size: 0.78rem;
+        color: var(--signal);
+        word-break: break-word;
+      }
+      .hint { margin-top: 10px; font-size: 0.85rem; color: var(--muted); }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Pick a guide vibe</h1>
+      <p class="sub">
+        Click any option to preview it as a floating guide. Tell me the <strong>name or code</strong>
+        (example: <em>Fox · E02</em>) and I’ll swap it in for the 3D robot.
+      </p>
+
+      <section class="section">
+        <h2>Emoji characters <span>Light · Fast</span></h2>
+        <div class="grid" id="emoji-grid"></div>
+      </section>
+
+      <section class="section">
+        <h2>Dev / tech icons <span>Clean · Pro</span></h2>
+        <div class="grid" id="tech-grid"></div>
+      </section>
+
+      <section class="section">
+        <h2>Cute mascots <span>Friendly · Memorable</span></h2>
+        <div class="grid" id="cute-grid"></div>
+      </section>
+
+      <section class="section">
+        <h2>Style directions <span>Not emoji — describe vibe</span></h2>
+        <div class="grid" id="style-grid"></div>
+      </section>
+
+      <div class="preview" id="preview">
+        <div class="big" id="preview-emoji">🤖</div>
+        <div class="bubble">
+          <div id="preview-name">Classic Robot · E01</div>
+          <div id="preview-line">Hey! I’m Sujay’s guide — scroll and I’ll hype the work.</div>
+          <code id="preview-code">Reply with: Classic Robot · E01</code>
+        </div>
+      </div>
+      <p class="hint">Tip: emoji guides load instantly and feel less “gimmicky” than the 3D robot for recruiters.</p>
+    </div>
+
+    <script>
+      const emoji = [
+        { code: 'E01', name: 'Classic Robot', emoji: '🤖', vibe: 'familiar tech buddy' },
+        { code: 'E02', name: 'Fox', emoji: '🦊', vibe: 'clever · sharp' },
+        { code: 'E03', name: 'Owl', emoji: '🦉', vibe: 'smart · calm' },
+        { code: 'E04', name: 'Cat', emoji: '🐱', vibe: 'curious · soft' },
+        { code: 'E05', name: 'Tiger', emoji: '🐯', vibe: 'bold · energetic' },
+        { code: 'E06', name: 'Penguin', emoji: '🐧', vibe: 'friendly engineer' },
+        { code: 'E07', name: 'Octopus', emoji: '🐙', vibe: 'multi-tasking backend' },
+        { code: 'E08', name: 'Dino', emoji: '🦕', vibe: 'playful · unique' },
+        { code: 'E09', name: 'Frog', emoji: '🐸', vibe: 'quirky · memorable' },
+        { code: 'E10', name: 'Bee', emoji: '🐝', vibe: 'busy builder' },
+        { code: 'E11', name: 'Wolf', emoji: '🐺', vibe: 'focused · strong' },
+        { code: 'E12', name: 'Panda', emoji: '🐼', vibe: 'calm · likable' },
+      ]
+
+      const tech = [
+        { code: 'T01', name: 'Rocket', emoji: '🚀', vibe: 'ship it' },
+        { code: 'T02', name: 'Bolt', emoji: '⚡', vibe: 'fast systems' },
+        { code: 'T03', name: 'Gear', emoji: '⚙️', vibe: 'ops · platforms' },
+        { code: 'T04', name: 'Chip', emoji: '🧠', vibe: 'systems thinker' },
+        { code: 'T05', name: 'Terminal', emoji: '💻', vibe: 'dev-first' },
+        { code: 'T06', name: 'Package', emoji: '📦', vibe: 'shipped services' },
+        { code: 'T07', name: 'Satellite', emoji: '🛰️', vibe: 'distributed systems' },
+        { code: 'T08', name: 'Shield', emoji: '🛡️', vibe: 'secure APIs' },
+        { code: 'T09', name: 'Compass', emoji: '🧭', vibe: 'guided tour' },
+        { code: 'T10', name: 'Spark', emoji: '✨', vibe: 'polished portfolio' },
+        { code: 'T11', name: 'Fire', emoji: '🔥', vibe: 'high energy' },
+        { code: 'T12', name: 'Target', emoji: '🎯', vibe: 'precise · backend' },
+      ]
+
+      const cute = [
+        { code: 'C01', name: 'Ninja', emoji: '🥷', vibe: 'quiet operator' },
+        { code: 'C02', name: 'Wizard', emoji: '🧙', vibe: 'API magician' },
+        { code: 'C03', name: 'Alien', emoji: '👽', vibe: 'fun · standout' },
+        { code: 'C04', name: 'Ghost', emoji: '👻', vibe: 'soft · playful' },
+        { code: 'C05', name: 'Robot Face', emoji: '👾', vibe: 'arcade energy' },
+        { code: 'C06', name: 'Crystal Ball', emoji: '🔮', vibe: 'future-facing' },
+        { code: 'C07', name: 'Coffee', emoji: '☕', vibe: 'dev life' },
+        { code: 'C08', name: 'Laptop Wave', emoji: '🧑‍💻', vibe: 'human developer' },
+        { code: 'C09', name: 'Seedling', emoji: '🌱', vibe: 'growth · learning' },
+        { code: 'C10', name: 'Star', emoji: '⭐', vibe: 'simple highlight' },
+        { code: 'C11', name: 'Moon', emoji: '🌙', vibe: 'calm night mode' },
+        { code: 'C12', name: 'Handshake', emoji: '🤝', vibe: 'hire / connect' },
+      ]
+
+      const styles = [
+        { code: 'S01', name: 'Pixel buddy', emoji: '🕹️', vibe: 'tiny 2D pixel character (no 3D)' },
+        { code: 'S02', name: 'Soft blob', emoji: '🫧', vibe: 'round animated blob face' },
+        { code: 'S03', name: 'Minimal SVG robot', emoji: '▢', vibe: 'flat line-art bot, teal accents' },
+        { code: 'S04', name: 'Speech-only', emoji: '💬', vibe: 'no character — just smart tips bubble' },
+        { code: 'S05', name: 'Cursor companion', emoji: '🖱️', vibe: 'small icon that follows mouse' },
+        { code: 'S06', name: 'Keep 3D robot', emoji: '🤖', vibe: 'current guide, opt-in only' },
+        { code: 'S07', name: 'No guide at all', emoji: '🚫', vibe: 'cleanest recruiter mode' },
+        { code: 'S08', name: 'Avatar circle', emoji: 'SK', vibe: 'your initials / photo badge' },
+      ]
+
+      const lines = [
+        'Hey! I’m Sujay’s guide — scroll and I’ll hype the work.',
+        'Projects next — Spring Boot, Kafka, Fusion ops.',
+        'Want the CV? Jump to Resume when you’re ready.',
+        'Open to work · Hyderabad · Backend Java.',
+      ]
+
+      function render(list, mountId) {
+        const root = document.getElementById(mountId)
+        root.innerHTML = list.map((item) => `
+          <button class="card" type="button" data-code="${item.code}" data-name="${item.name}" data-emoji="${item.emoji}" data-vibe="${item.vibe}">
+            <span class="emoji">${item.emoji}</span>
+            <div class="name">${item.name}</div>
+            <div class="tag">${item.code} · ${item.vibe}</div>
+          </button>
+        `).join('')
+      }
+
+      render(emoji, 'emoji-grid')
+      render(tech, 'tech-grid')
+      render(cute, 'cute-grid')
+      render(styles, 'style-grid')
+
+      let i = 0
+      function select(btn) {
+        document.querySelectorAll('.card').forEach((c) => c.classList.remove('selected'))
+        btn.classList.add('selected')
+        const { code, name, emoji, vibe } = btn.dataset
+        document.getElementById('preview-emoji').textContent = emoji
+        document.getElementById('preview-name').textContent = `${name} · ${code}`
+        document.getElementById('preview-line').textContent = `${lines[i % lines.length]} (${vibe})`
+        document.getElementById('preview-code').textContent = `Reply with: ${name} · ${code}`
+        i += 1
+      }
+
+      document.querySelectorAll('.card').forEach((btn) => {
+        btn.addEventListener('click', () => select(btn))
+      })
+
+      // default select first
+      select(document.querySelector('.card'))
+    </script>
+  </body>
+</html>

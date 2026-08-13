@@ -1,0 +1,1005 @@
+﻿{
+    "$schema":  "http://adaptivecards.io/schemas/adaptive-card.json",
+    "type":  "AdaptiveCard",
+    "version":  "1.5",
+    "msteams":  {
+                    "width":  "Full"
+                },
+    "body":  [
+                 {
+                     "weight":  "Bolder",
+                     "wrap":  true,
+                     "size":  "Large",
+                     "type":  "TextBlock",
+                     "text":  "Daily Collection Checker"
+                 },
+                 {
+                     "text":  "Generated 2026-08-13 14:33:17 IST",
+                     "isSubtle":  true,
+                     "spacing":  "None",
+                     "type":  "TextBlock",
+                     "wrap":  true,
+                     "size":  "Small"
+                 },
+                 {
+                     "text":  "yesterday = 2026-08-12, today = 2026-08-13 (zone Asia/Kolkata)",
+                     "isSubtle":  true,
+                     "spacing":  "None",
+                     "type":  "TextBlock",
+                     "wrap":  true,
+                     "size":  "Small"
+                 },
+                 {
+                     "bleed":  true,
+                     "style":  "good",
+                     "items":  [
+                                   {
+                                       "text":  "STATUS: OK",
+                                       "wrap":  true,
+                                       "type":  "TextBlock",
+                                       "color":  "Good",
+                                       "weight":  "Bolder",
+                                       "size":  "Medium"
+                                   }
+                               ],
+                     "spacing":  "Medium",
+                     "type":  "Container"
+                 },
+                 {
+                     "weight":  "Bolder",
+                     "wrap":  true,
+                     "spacing":  "Medium",
+                     "type":  "TextBlock",
+                     "text":  "Tally results"
+                 },
+                 {
+                     "items":  [
+                                   {
+                                       "firstRowAsHeaders":  true,
+                                       "gridStyle":  "accent",
+                                       "spacing":  "Small",
+                                       "type":  "Table",
+                                       "showGridLines":  true,
+                                       "columns":  [
+                                                       {
+                                                           "width":  3
+                                                       },
+                                                       {
+                                                           "width":  1
+                                                       }
+                                                   ],
+                                       "rows":  [
+                                                    {
+                                                        "style":  "accent",
+                                                        "type":  "TableRow",
+                                                        "cells":  [
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "Step",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Bolder",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "Result",
+                                                                                            "horizontalAlignment":  "Right",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Bolder",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      }
+                                                                  ]
+                                                    },
+                                                    {
+                                                        "cells":  [
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "STEP1 TALLY (CASH \u0026 CARD only)",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "TALLY OK",
+                                                                                            "horizontalAlignment":  "Right",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Good",
+                                                                                            "weight":  "Bolder",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      }
+                                                                  ],
+                                                        "type":  "TableRow"
+                                                    },
+                                                    {
+                                                        "cells":  [
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "STEP-5 BANK TALLY",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "TALLY OK",
+                                                                                            "horizontalAlignment":  "Right",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Good",
+                                                                                            "weight":  "Bolder",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      }
+                                                                  ],
+                                                        "type":  "TableRow"
+                                                    },
+                                                    {
+                                                        "cells":  [
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "STEP-6 DD TALLY",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "TALLY OK",
+                                                                                            "horizontalAlignment":  "Right",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Good",
+                                                                                            "weight":  "Bolder",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      }
+                                                                  ],
+                                                        "type":  "TableRow"
+                                                    },
+                                                    {
+                                                        "cells":  [
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "STEP-6 CHEQUE TALLY",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "TALLY OK",
+                                                                                            "horizontalAlignment":  "Right",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Good",
+                                                                                            "weight":  "Bolder",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      }
+                                                                  ],
+                                                        "type":  "TableRow"
+                                                    }
+                                                ]
+                                   }
+                               ],
+                     "separator":  true,
+                     "spacing":  "Small",
+                     "type":  "Container"
+                 },
+                 {
+                     "items":  [
+                                   {
+                                       "text":  "SCAITS SUMMARY",
+                                       "wrap":  true,
+                                       "spacing":  "Medium",
+                                       "type":  "TextBlock",
+                                       "weight":  "Bolder",
+                                       "size":  "Medium"
+                                   },
+                                   {
+                                       "firstRowAsHeaders":  true,
+                                       "gridStyle":  "accent",
+                                       "spacing":  "Small",
+                                       "type":  "Table",
+                                       "showGridLines":  true,
+                                       "columns":  [
+                                                       {
+                                                           "width":  2
+                                                       },
+                                                       {
+                                                           "width":  6
+                                                       },
+                                                       {
+                                                           "width":  6
+                                                       },
+                                                       {
+                                                           "width":  3
+                                                       },
+                                                       {
+                                                           "width":  2
+                                                       }
+                                                   ],
+                                       "rows":  [
+                                                    {
+                                                        "style":  "accent",
+                                                        "type":  "TableRow",
+                                                        "cells":  [
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "SOURCE",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Bolder",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "GL_DATE",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Bolder",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "TRANSACTION_TYPE",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Bolder",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "STATUS",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Bolder",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "COUNT",
+                                                                                            "horizontalAlignment":  "Right",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Bolder",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      }
+                                                                  ]
+                                                    },
+                                                    {
+                                                        "cells":  [
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "SCAITS",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "2026-08-12 00:00",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "collections",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "I",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "382",
+                                                                                            "horizontalAlignment":  "Right",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Bolder",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      }
+                                                                  ],
+                                                        "type":  "TableRow"
+                                                    },
+                                                    {
+                                                        "cells":  [
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "SCAITS",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "2026-08-12 00:00",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "Pocket Money Cash",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "Error",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Attention",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "2",
+                                                                                            "horizontalAlignment":  "Right",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Bolder",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      }
+                                                                  ],
+                                                        "type":  "TableRow"
+                                                    },
+                                                    {
+                                                        "cells":  [
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "SCAITS",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "2026-08-12 00:00",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "Pocket Money Cash",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "Success",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Good",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "30",
+                                                                                            "horizontalAlignment":  "Right",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Bolder",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      }
+                                                                  ],
+                                                        "type":  "TableRow"
+                                                    },
+                                                    {
+                                                        "cells":  [
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "SCAITS",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "2026-08-12 00:00",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "Pocket Money Spent",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "Error",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Attention",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "3",
+                                                                                            "horizontalAlignment":  "Right",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Bolder",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      }
+                                                                  ],
+                                                        "type":  "TableRow"
+                                                    },
+                                                    {
+                                                        "cells":  [
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "SCAITS",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "2026-08-12 00:00",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "Pocket Money Spent",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "Success",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Good",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "10",
+                                                                                            "horizontalAlignment":  "Right",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Bolder",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      }
+                                                                  ],
+                                                        "type":  "TableRow"
+                                                    }
+                                                ]
+                                   }
+                               ],
+                     "separator":  true,
+                     "spacing":  "Medium",
+                     "type":  "Container"
+                 },
+                 {
+                     "items":  [
+                                   {
+                                       "text":  "VARNA SUMMARY",
+                                       "wrap":  true,
+                                       "spacing":  "Medium",
+                                       "type":  "TextBlock",
+                                       "weight":  "Bolder",
+                                       "size":  "Medium"
+                                   },
+                                   {
+                                       "firstRowAsHeaders":  true,
+                                       "gridStyle":  "accent",
+                                       "spacing":  "Small",
+                                       "type":  "Table",
+                                       "showGridLines":  true,
+                                       "columns":  [
+                                                       {
+                                                           "width":  2
+                                                       },
+                                                       {
+                                                           "width":  2
+                                                       },
+                                                       {
+                                                           "width":  6
+                                                       },
+                                                       {
+                                                           "width":  7
+                                                       },
+                                                       {
+                                                           "width":  2
+                                                       }
+                                                   ],
+                                       "rows":  [
+                                                    {
+                                                        "style":  "accent",
+                                                        "type":  "TableRow",
+                                                        "cells":  [
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "SOURCE",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Bolder",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "STATUS",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Bolder",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "TRANSACTION_TYPE",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Bolder",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "DAY_SHEET_DATE",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Bolder",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "COUNT",
+                                                                                            "horizontalAlignment":  "Right",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Bolder",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      }
+                                                                  ]
+                                                    },
+                                                    {
+                                                        "cells":  [
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "VARNA",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "P",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "Collections",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "2026-08-11 00:00:00",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "126",
+                                                                                            "horizontalAlignment":  "Right",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Bolder",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      }
+                                                                  ],
+                                                        "type":  "TableRow"
+                                                    },
+                                                    {
+                                                        "cells":  [
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "VARNA",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "P",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "Deposits",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "2026-08-11 00:00:00",
+                                                                                            "horizontalAlignment":  "Left",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Default",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      },
+                                                                      {
+                                                                          "items":  [
+                                                                                        {
+                                                                                            "text":  "24",
+                                                                                            "horizontalAlignment":  "Right",
+                                                                                            "wrap":  true,
+                                                                                            "type":  "TextBlock",
+                                                                                            "color":  "Default",
+                                                                                            "weight":  "Bolder",
+                                                                                            "size":  "Small"
+                                                                                        }
+                                                                                    ],
+                                                                          "type":  "TableCell"
+                                                                      }
+                                                                  ],
+                                                        "type":  "TableRow"
+                                                    }
+                                                ]
+                                   }
+                               ],
+                     "separator":  true,
+                     "spacing":  "Medium",
+                     "type":  "Container"
+                 }
+             ]
+}
