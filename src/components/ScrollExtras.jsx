@@ -3,6 +3,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa6'
 import { easeOut, springSoft } from '../lib/motion'
 import { smoothScrollToId } from './SmoothScroll'
+import { readActiveSection } from '../lib/sections'
 
 const SECTIONS = [
   { id: 'home', label: 'Home' },
@@ -25,21 +26,23 @@ export default function ScrollExtras() {
   const [showCue, setShowCue] = useState(true)
 
   useEffect(() => {
-    const ids = SECTIONS.map((s) => s.id)
-    const obs = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
-        if (visible?.target?.id) setActive(visible.target.id)
-      },
-      { rootMargin: '-42% 0px -42% 0px', threshold: [0.1, 0.35, 0.6] }
-    )
-    ids.forEach((id) => {
-      const el = document.getElementById(id)
-      if (el) obs.observe(el)
-    })
-    return () => obs.disconnect()
+    let raf = 0
+    const sync = () => {
+      raf = 0
+      setActive(readActiveSection())
+    }
+    const onScroll = () => {
+      if (raf) return
+      raf = window.requestAnimationFrame(sync)
+    }
+    sync()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    return () => {
+      if (raf) window.cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
   }, [])
 
   useEffect(() => {

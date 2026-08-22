@@ -1,9 +1,8 @@
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import {
   motion,
   useMotionTemplate,
   useMotionValue,
-  useReducedMotion,
 } from 'framer-motion'
 import {
   FaGithub,
@@ -16,7 +15,8 @@ import {
   FaBolt,
 } from 'react-icons/fa6'
 import { FaDownload } from 'react-icons/fa'
-import { Marquee, SplitChars, ScrambleText } from './motion/Reveal'
+import { Marquee, MaskReveal } from './motion/Reveal'
+import { ParallaxLayer } from './motion/ScrollFX'
 import { toast } from './UxChrome'
 import { easeOut, springStamp, viewportOnce } from '../lib/motion'
 
@@ -90,9 +90,6 @@ function MagneticCard({ children, className = '', ...rest }) {
 }
 
 const Contact = () => {
-  const reduce = useReducedMotion()
-  const [ready, setReady] = useState(false)
-
   const copyEmail = async () => {
     try {
       await navigator.clipboard.writeText(EMAIL)
@@ -104,20 +101,16 @@ const Contact = () => {
 
   return (
     <section id="contact" className="contact-finale relative overflow-hidden pb-10 pt-24 md:pt-32">
-      <div className="pointer-events-none absolute inset-0">
-        <motion.div
+      <ParallaxLayer speed={18} className="pointer-events-none absolute inset-0">
+        <div
           aria-hidden
-          animate={reduce ? undefined : { scale: [1, 1.15, 1], opacity: [0.35, 0.6, 0.35] }}
-          transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
           className="absolute -left-24 top-10 h-[42vmax] w-[42vmax] rounded-full bg-[color-mix(in_srgb,var(--signal)_18%,transparent)] blur-3xl"
         />
-        <motion.div
+        <div
           aria-hidden
-          animate={reduce ? undefined : { scale: [1.1, 0.95, 1.1], opacity: [0.25, 0.5, 0.25] }}
-          transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
           className="absolute -right-20 bottom-0 h-[48vmax] w-[48vmax] rounded-full bg-[color-mix(in_srgb,var(--hot)_16%,transparent)] blur-3xl"
         />
-      </div>
+      </ParallaxLayer>
 
       <div className="pointer-events-none absolute inset-x-0 top-8 -rotate-3 opacity-30">
         <Marquee items={['OPEN TO WORK', 'BACKEND JAVA', 'SPRING BOOT', 'MICROSERVICES', 'HIRE', 'HYDERABAD']} />
@@ -132,7 +125,6 @@ const Contact = () => {
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={viewportOnce}
-            onViewportEnter={() => setReady(true)}
             transition={{ duration: 0.45, ease: easeOut }}
             className="mb-5 inline-flex items-center gap-2 rounded-full border border-[var(--line)] bg-[var(--bg-elevated)] px-4 py-2"
           >
@@ -142,15 +134,14 @@ const Contact = () => {
               transition={{ duration: 1.4, repeat: Infinity }}
             />
             <span className="font-mono text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--text-faint)]">
-              <ScrambleText text="STATUS · OPEN TO WORK" trigger={ready} />
+              Open to work
             </span>
           </motion.div>
 
           <h2 className="contact-title font-display text-[clamp(3.4rem,13vw,8rem)] uppercase leading-[0.84] tracking-tight text-[var(--ink)]">
-            <SplitChars text="LET'S" />
-            <br />
+            <MaskReveal>LET'S</MaskReveal>
             <span className="contact-title__hot">
-              <SplitChars text="CONNECT" delay={0.12} />
+              <MaskReveal delay={0.08}>CONNECT</MaskReveal>
             </span>
           </h2>
 
@@ -178,8 +169,8 @@ const Contact = () => {
         </div>
 
         <motion.div
-          initial={{ opacity: 0, y: 40, rotateX: 8 }}
-          whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={viewportOnce}
           transition={{ duration: 0.6, ease: easeOut }}
           style={{ transformPerspective: 1200 }}

@@ -28,9 +28,10 @@ export default function RobotExpressive({ className = '', onReady, onClick }) {
     let height = rect.height || 560
 
     const scene = new THREE.Scene()
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true })
+    const mobile = window.matchMedia('(max-width: 767px)').matches
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: !mobile, powerPreference: 'low-power' })
     renderer.setSize(width, height)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, mobile ? 1 : 1.25))
     renderer.toneMapping = THREE.ACESFilmicToneMapping
     renderer.toneMappingExposure = 1.2
     mount.appendChild(renderer.domElement)
@@ -307,8 +308,15 @@ export default function RobotExpressive({ className = '', onReady, onClick }) {
     }
     document.addEventListener('mousemove', onMove)
 
+    let live = document.visibilityState !== 'hidden'
+    const onVis = () => {
+      live = document.visibilityState !== 'hidden'
+    }
+    document.addEventListener('visibilitychange', onVis)
+
     const animate = () => {
       raf = requestAnimationFrame(animate)
+      if (!live) return
       const delta = clock.getDelta()
       const t = clock.getElapsedTime()
       if (mixer) mixer.update(delta)
@@ -340,8 +348,14 @@ export default function RobotExpressive({ className = '', onReady, onClick }) {
 
       camShake = lerp(camShake, 0, 0.12)
       const midY = modelSize.y * 0.55
-      camera.position.x = Math.sin(t * 0.35) * 0.08 + (Math.random() - 0.5) * camShake
-      camera.position.y = midY + Math.cos(t * 0.4) * 0.04 + (Math.random() - 0.5) * camShake
+      let cx = Math.sin(t * 0.35) * 0.08
+      let cy = midY + Math.cos(t * 0.4) * 0.04
+      if (camShake > 0.004) {
+        cx += (Math.random() - 0.5) * camShake
+        cy += (Math.random() - 0.5) * camShake
+      }
+      camera.position.x = cx
+      camera.position.y = cy
       camera.lookAt(0, midY, 0)
 
       rim.intensity = 38 + Math.sin(t * 2.2) * 8
@@ -373,6 +387,7 @@ export default function RobotExpressive({ className = '', onReady, onClick }) {
       window.clearInterval(emoteTimer)
       window.clearTimeout(resizeSettle)
       ro.disconnect()
+      document.removeEventListener('visibilitychange', onVis)
       document.removeEventListener('mousemove', onMove)
       window.removeEventListener('resize', onResize)
       renderer.dispose()

@@ -6,19 +6,19 @@ import PortfolioMini from './project-uis/PortfolioMini'
 
 export function BrowserChrome({ title, children, accent = 'var(--signal)' }) {
   return (
-    <div className="project-ui overflow-hidden rounded-[1.1rem] border border-[var(--line)] bg-[#0b1210] shadow-2xl">
-      <div className="flex items-center gap-2 border-b border-white/10 bg-[#111a17] px-3 py-2.5">
+    <div className="project-ui overflow-hidden rounded-[1.15rem] border border-[var(--line)] bg-[#0b1210] shadow-[0_24px_48px_rgba(0,0,0,0.32)]">
+      <div className="flex items-center gap-2 border-b border-white/10 bg-[#111a17] px-3 py-2">
         <span className="flex gap-1.5">
           <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
           <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
           <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
         </span>
         <div className="ml-2 flex min-w-0 flex-1 items-center gap-2 rounded-md bg-black/35 px-3 py-1">
-          <span className="h-1.5 w-1.5 rounded-full" style={{ background: accent }} />
-          <span className="truncate font-mono text-[10px] text-white/55">{title}</span>
+          <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: accent }} />
+          <span className="truncate font-mono text-[11px] text-white/70">{title}</span>
         </div>
       </div>
-      <div className="relative min-h-[280px] md:min-h-[340px]">{children}</div>
+      <div className="relative min-h-[340px] md:min-h-[420px] lg:min-h-[460px]">{children}</div>
     </div>
   )
 }

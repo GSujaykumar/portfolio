@@ -3,6 +3,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import RobotExpressive from './RobotExpressive'
 import { easeOut, springStamp, springCrazy } from '../lib/motion'
 import { smoothScrollToId } from './SmoothScroll'
+import { SECTION_IDS, readActiveSection } from '../lib/sections'
 
 const SCRIPT = {
   home: {
@@ -10,9 +11,9 @@ const SCRIPT = {
     emote: 'Wave',
     face: 'Surprised',
     lines: [
-      "Hi — I'm your tour guide. I'll walk you through Sujay's best work.",
-      "Tap Next to jump sections, or scroll — I'll react and tip you along the way.",
-      'Recruiters: start with Projects, then Resume. Hiring managers: Experience → Contact.',
+      "Hey — I'm Sujay's guide. I'll hop around the page and walk you through his work.",
+      'This is a backend Java portfolio: Spring Boot, microservices, Oracle Fusion ops.',
+      'Scroll to Projects — I will bounce to a new spot and keep explaining as you go.',
     ],
     actions: [
       { id: 'next', label: 'Start tour', go: 'work' },
@@ -24,9 +25,9 @@ const SCRIPT = {
     emote: 'ThumbsUp',
     face: 'Surprised',
     lines: [
-      'Keep scrolling — this lane moves sideways through 5 real systems.',
-      'Look for Production badges + GitHub. Fusion Ops and Teams checker are live work.',
-      'Tip: click a project chip below to jump. Then hit Next for Impact numbers.',
+      'Five real systems — not mock screenshots. Scroll or tap a chip to switch them.',
+      'Fusion Ops Console and the Daily Teams checker are production work from Varsity.',
+      'AlgoLens, payments outbox, and this site show range. Next: proof in numbers.',
     ],
     actions: [
       { id: 'next', label: 'See impact', go: 'impact' },
@@ -39,8 +40,8 @@ const SCRIPT = {
     face: null,
     lines: [
       'These counters are real delivery signals — years, systems, query gains.',
-      'Green pulse = usually available in IST. Great for scheduling a call.',
-      'Next up: what he actually ships day-to-day.',
+      'Green pulse means usually available in IST. Handy if you want to schedule a call.',
+      'Signature cards are next — four proof points in one glance.',
     ],
     actions: [
       { id: 'next', label: 'Signature work', go: 'highlights' },
@@ -53,8 +54,8 @@ const SCRIPT = {
     face: null,
     lines: [
       'Four proof points: APIs, Fusion data, resilience, and ops people can run.',
-      'Hover a card — spotlight follows your cursor. This is the story in one glance.',
-      'Ready for the bio? About is next.',
+      'Hover a card — the spotlight follows you. That is the story in one glance.',
+      'About is next: who he is, what he owns, and how he ships.',
     ],
     actions: [{ id: 'next', label: 'About Sujay', go: 'about' }],
   },
@@ -64,8 +65,8 @@ const SCRIPT = {
     face: null,
     lines: [
       'Backend Java · Spring Boot · Microservices · Oracle Fusion ownership.',
-      '2 years shipping secure REST + finance-ops automation at Varsity.',
-      'Want proof in production history? Jump to Experience.',
+      'Two years shipping secure REST APIs and finance-ops automation at Varsity.',
+      'Experience is next — production history, not a buzzword list.',
     ],
     actions: [
       { id: 'next', label: 'Experience', go: 'experience' },
@@ -77,9 +78,9 @@ const SCRIPT = {
     emote: 'ThumbsUp',
     face: null,
     lines: [
-      'Varsity — microservices, JWT, Docker/Jenkins, tracing, Fusion pipelines.',
-      '~25% query gains. Daily Teams health checks. Operator console he runs.',
-      'Stack deep-dive is next — or skip to Contact if you want to hire.',
+      'Varsity: microservices, JWT, Docker/Jenkins, tracing, Fusion pipelines.',
+      'About 25% query gains, daily Teams health checks, and a console operators run.',
+      'Skills is a stack deep-dive. Contact is one hop if you already want to hire.',
     ],
     actions: [
       { id: 'next', label: 'See stack', go: 'skills' },
@@ -91,9 +92,9 @@ const SCRIPT = {
     emote: 'Wave',
     face: 'Surprised',
     lines: [
-      'Replay the mini terminal — whoami, stack, shipped, hire status.',
-      'Fun, but the real signal is still Projects + Experience.',
-      'Hit Replay on the panel, or continue to Skills.',
+      'This mini terminal replays whoami, stack, shipped work, and hire status.',
+      'Fun extra — the real signal is still Projects plus Experience.',
+      'Hit Replay on the panel, or keep scrolling into the skill constellation.',
     ],
     actions: [{ id: 'next', label: 'Skills', go: 'skills' }],
   },
@@ -102,9 +103,9 @@ const SCRIPT = {
     emote: 'Punch',
     face: 'Angry',
     lines: [
-      'Orbit / keyword wall — Java, Spring, MySQL, Oracle, Kafka, Redis, Docker.',
-      'Hover pills for recruiter keywords. I punch when this section lands.',
-      'CV PDF is one scroll away — or grab it now.',
+      'Pick a lane — Java, Spring, MySQL, Oracle, Kafka, Redis, Docker all live here.',
+      'Hover a planet or pill to pin a tool. I punch when this section lands.',
+      'Education and the ATS-ready CV are just below.',
     ],
     actions: [
       { id: 'next', label: 'Resume', go: 'resume' },
@@ -117,8 +118,8 @@ const SCRIPT = {
     face: null,
     lines: [
       'B.Tech CSE · JNTUH · 2021–2024.',
-      'Production taught the rest — Fusion ops, CI/CD, observability.',
-      'Resume next for the ATS-ready PDF.',
+      'Production taught the rest — Fusion ops, CI/CD, and observability.',
+      'Resume is next: download the PDF, then say hello.',
     ],
     actions: [{ id: 'next', label: 'Resume', go: 'resume' }],
   },
@@ -127,9 +128,9 @@ const SCRIPT = {
     emote: 'Jump',
     face: 'Surprised',
     lines: [
-      'Download or open the PDF — built for ATS + humans.',
-      "I'll jump when you land here. Grab the CV, then say hello.",
-      'Contact is the finish line — email is fastest.',
+      'Download or open the PDF — built for ATS and humans.',
+      'I jump when you land here. Grab the CV, then scroll to Contact.',
+      'Email is the fastest hello. LinkedIn and GitHub are one tap too.',
     ],
     actions: [
       { id: 'cv', label: 'Download CV', href: '/Sujay-Kumar-Resume.pdf', download: true },
@@ -142,8 +143,8 @@ const SCRIPT = {
     face: 'Surprised',
     lines: [
       'You made it — open to work · Hyderabad · remote-friendly.',
-      'Email first for opportunities. Phone / LinkedIn / GitHub are one tap.',
-      'Click me for a farewell dance. Thanks for touring!',
+      'Email first for opportunities. Phone, LinkedIn, and GitHub are one tap.',
+      'Click me for a farewell dance. Thanks for touring the work!',
     ],
     actions: [
       { id: 'mail', label: 'Email Sujay', href: 'mailto:sujaykumargaddam18@gmail.com?subject=Opportunity%20-%20Sujay%20Kumar' },
@@ -152,89 +153,72 @@ const SCRIPT = {
   },
 }
 
-const ORDER = [
-  'home',
-  'work',
-  'impact',
-  'highlights',
-  'about',
-  'experience',
-  'terminal',
-  'skills',
-  'education',
-  'resume',
-  'contact',
-]
-const LINE_MS = 5200
-const WALK_SPEED = 0.42
-const RUN_SPEED = 1.05
+const LINE_MS = 4800
+const WALK_SPEED = 0.38
+const RUN_SPEED = 1.15
 
 const rand = (min, max) => min + Math.random() * (max - min)
 const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
 
-function heroPose() {
-  const vw = window.innerWidth
-  const vh = window.innerHeight
-  const width = Math.min(440, vw * 0.32)
-  const height = Math.min(580, vh * 0.7)
-  return {
-    left: vw - width - vw * 0.04,
-    top: (vh - height) / 2 + vh * 0.03,
-    width,
-    height,
-  }
-}
-
-function roamPose() {
+function robotSize() {
   const vw = window.innerWidth
   const vh = window.innerHeight
   const desktop = vw >= 1024
-  const width = desktop ? 200 : 128
-  const height = desktop ? 240 : 152
-  const m = desktop ? 18 : 10
-
-  if (desktop && Math.random() < 0.45) {
-    const onLeft = Math.random() < 0.5
-    return {
-      left: onLeft ? rand(m, m + vw * 0.06) : rand(vw - width - m - vw * 0.04, vw - width - m),
-      top: rand(vh * 0.2, vh * 0.58),
-      width,
-      height,
-    }
-  }
-
   return {
-    left: rand(m, vw - width - m),
-    top: rand(vh - height - m - vh * 0.16, vh - height - m),
-    width,
-    height,
+    width: desktop ? 168 : 112,
+    height: desktop ? 204 : 136,
   }
 }
 
-/** Sit near the active section's right edge when possible */
-function sectionPose(sectionId) {
-  const el = document.getElementById(sectionId)
+function clampPose(pose) {
   const vw = window.innerWidth
   const vh = window.innerHeight
-  const desktop = vw >= 1024
-  const width = desktop ? 190 : 124
-  const height = desktop ? 228 : 148
-
-  // Keep off the skills constellation (left column) so lane icons stay visible
-  if (sectionId === 'skills') {
-    return {
-      left: clamp(vw - width - 18, vw * 0.72, vw - width - 10),
-      top: clamp(vh - height - 96, vh * 0.58, vh - height - 24),
-      width,
-      height,
-    }
+  const { width, height } = robotSize()
+  return {
+    ...pose,
+    width,
+    height,
+    left: clamp(pose.left, 10, vw - width - 10),
+    top: clamp(pose.top, 76, vh - height - 16),
   }
+}
 
-  if (!el) return roamPose()
-  const r = el.getBoundingClientRect()
-  const left = clamp(r.right - width - 24, 12, vw - width - 12)
-  const top = clamp(r.top + 40, 72, vh - height - 24)
-  return { left, top, width, height }
+/** Hop to a distant random slot so the robot never parks. */
+function randomPose(from) {
+  const vw = window.innerWidth
+  const vh = window.innerHeight
+  const { width, height } = robotSize()
+  const leftMin = 12
+  const leftMax = vw - width - 12
+  const topMin = 80
+  const topMax = vh - height - 18
+
+  const slots = [
+    [leftMin, topMin],
+    [leftMax, topMin],
+    [leftMin, topMax],
+    [leftMax, topMax],
+    [leftMin, vh * 0.36],
+    [leftMax, vh * 0.4],
+    [vw * 0.12, vh * 0.22],
+    [vw * 0.62, vh * 0.18],
+    [vw * 0.2, vh * 0.58],
+    [vw * 0.55, vh * 0.52],
+    [vw * 0.38, topMin],
+    [vw * 0.42, topMax],
+  ].map(([l, t]) => ({
+    left: clamp(l + rand(-28, 28), leftMin, leftMax),
+    top: clamp(t + rand(-22, 22), topMin, topMax),
+    width,
+    height,
+  }))
+
+  const minDist = Math.min(vw, vh) * 0.32
+  const far = from
+    ? slots.filter((s) => Math.hypot(s.left - from.left, s.top - from.top) >= minDist)
+    : slots
+  const pool = far.length ? far : slots
+  return pool[Math.floor(Math.random() * pool.length)]
 }
 
 function useTypedText(text, enabled) {
@@ -369,13 +353,12 @@ function TourBeacon({ from, toId }) {
   )
 }
 
-export default function GuideRobot({ onDismiss }) {
+export default function GuideRobot() {
   const reduce = useReducedMotion()
   const [mode, setMode] = useState('hero')
   const [active, setActive] = useState('home')
-  const [pose, setPose] = useState(() => ({ ...heroPose(), ms: 800 }))
+  const [pose, setPose] = useState(() => ({ ...randomPose(), ms: 700 }))
   const [line, setLine] = useState(0)
-  const [open, setOpen] = useState(true)
   const [burst, setBurst] = useState(0)
   const [ghosts, setGhosts] = useState([])
   const [mood, setMood] = useState('help') // help | hype | tip
@@ -388,11 +371,6 @@ export default function GuideRobot({ onDismiss }) {
   const poseRef = useRef(pose)
   const clickCombo = useRef(0)
   const lastHelpRef = useRef(Date.now())
-
-  const turnOff = () => {
-    setOpen(false)
-    onDismiss?.()
-  }
 
   const markHelp = useCallback(() => {
     lastHelpRef.current = Date.now()
@@ -456,42 +434,41 @@ export default function GuideRobot({ onDismiss }) {
     [markHelp]
   )
 
-  const runAction = (action) => {
-    markHelp()
-    setBurst((n) => n + 1)
-    setBounce((n) => n + 1)
-    apiRef.current?.playEmote?.('ThumbsUp')
-    if (action.go) {
-      goSection(action.go)
-      return
-    }
-    if (action.href) {
-      if (action.download) {
-        const a = document.createElement('a')
-        a.href = action.href
-        a.download = 'Sujay-Kumar-Resume.pdf'
-        a.click()
-        apiRef.current?.celebrate?.(3200)
-        setMood('hype')
-        return
-      }
-      window.open(action.href, action.href.startsWith('http') ? '_blank' : undefined)
-      apiRef.current?.wave?.() || apiRef.current?.playEmote?.('Wave')
-    }
-  }
+  const playExplain = useCallback((id) => {
+    const spot = SCRIPT[id]
+    window.setTimeout(() => {
+      if (id === 'contact') apiRef.current?.celebrate?.(3800)
+      else if (id === 'skills') apiRef.current?.combo?.()
+      else if (id === 'resume') {
+        apiRef.current?.flip?.()
+        window.setTimeout(() => apiRef.current?.playEmote?.('Jump'), 220)
+      } else if (id === 'work') {
+        apiRef.current?.boost?.()
+        apiRef.current?.playEmote?.('ThumbsUp')
+      } else if (id === 'impact') {
+        apiRef.current?.playEmote?.('Yes')
+        apiRef.current?.boost?.()
+      } else if (id === 'home') apiRef.current?.wave?.()
+      else if (spot?.emote) apiRef.current?.playEmote?.(spot.emote)
+      apiRef.current?.setExpression?.(spot?.face ?? null)
+      window.setTimeout(() => apiRef.current?.setExpression?.(null), 2200)
+    }, 420)
+  }, [])
 
   useEffect(() => {
     if (reduce) return undefined
     let lastY = window.scrollY
     let settle = 0
+    let raf = 0
 
     const sync = () => {
+      raf = 0
       const y = window.scrollY
       const nextMode = y > window.innerHeight * 0.5 ? 'guide' : 'hero'
       if (nextMode !== modeRef.current) {
         modeRef.current = nextMode
         setMode(nextMode)
-        moveTo(nextMode === 'hero' ? heroPose() : sectionPose(activeRef.current))
+        moveTo(randomPose(poseRef.current))
         if (nextMode === 'guide') {
           setBurst((n) => n + 1)
           apiRef.current?.flip?.()
@@ -512,41 +489,39 @@ export default function GuideRobot({ onDismiss }) {
       lastY = y
     }
 
-    const onResize = () =>
-      moveTo(modeRef.current === 'hero' ? heroPose() : sectionPose(activeRef.current))
+    const onScroll = () => {
+      if (raf) return
+      raf = window.requestAnimationFrame(sync)
+    }
 
-    window.addEventListener('scroll', sync, { passive: true })
+    const onResize = () => moveTo(clampPose(poseRef.current))
+
+    window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onResize)
     return () => {
       window.clearTimeout(settle)
-      window.removeEventListener('scroll', sync)
+      if (raf) window.cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onResize)
     }
   }, [moveTo, reduce])
 
-  // Idle helpful fidgets + occasional dance
   useEffect(() => {
     if (reduce) return undefined
     let timer = 0
-    const tick = () => {
-      if (modeRef.current === 'guide') {
-        const roll = Math.random()
-        if (roll < 0.35) moveTo(sectionPose(activeRef.current))
-        else if (roll < 0.55) {
-          moveTo(activeRef.current === 'skills' ? sectionPose('skills') : roamPose())
-        }
-        if (roll < 0.18) apiRef.current?.flip?.()
-        else if (roll < 0.34) apiRef.current?.playEmote?.('Wave')
-        else if (roll < 0.46) apiRef.current?.playEmote?.('ThumbsUp')
-        else if (roll < 0.54) apiRef.current?.playEmote?.('Yes')
-        else if (roll < 0.62) apiRef.current?.dance?.(2600)
-        else if (roll < 0.7) apiRef.current?.sit?.(3200)
-      } else if (Math.random() < 0.45) {
-        apiRef.current?.playEmote?.('Wave')
-      }
-      timer = window.setTimeout(tick, rand(3200, 5600))
+    const hop = () => {
+      moveTo(randomPose(poseRef.current))
+      setBurst((n) => n + 1)
+      const roll = Math.random()
+      if (roll < 0.22) apiRef.current?.flip?.()
+      else if (roll < 0.42) apiRef.current?.playEmote?.('Wave')
+      else if (roll < 0.58) apiRef.current?.playEmote?.('ThumbsUp')
+      else if (roll < 0.7) apiRef.current?.playEmote?.('Jump')
+      else if (roll < 0.82) apiRef.current?.dance?.(2200)
+      else apiRef.current?.playEmote?.('Yes')
+      timer = window.setTimeout(hop, rand(8000, 12000))
     }
-    timer = window.setTimeout(tick, rand(2800, 4200))
+    timer = window.setTimeout(hop, rand(5000, 8000))
     return () => window.clearTimeout(timer)
   }, [moveTo, reduce])
 
@@ -555,7 +530,6 @@ export default function GuideRobot({ onDismiss }) {
     if (reduce) return undefined
     const id = window.setInterval(() => {
       if (Date.now() - lastHelpRef.current < 14000) return
-      setOpen(true)
       setNudge(true)
       setBurst((n) => n + 1)
       setBounce((n) => n + 1)
@@ -570,54 +544,30 @@ export default function GuideRobot({ onDismiss }) {
 
   useEffect(() => {
     if (reduce) return undefined
-    const els = ORDER.map((id) => document.getElementById(id)).filter(Boolean)
-    if (!els.length) return undefined
 
-    const io = new IntersectionObserver(
-      (entries) => {
-        let best = null
-        entries.forEach((e) => {
-          if (e.isIntersecting && (!best || e.intersectionRatio > best.intersectionRatio)) {
-            best = e
-          }
-        })
-        if (!best || best.target.id === activeRef.current) return
+    const apply = (id) => {
+      if (!id || id === activeRef.current) return
+      activeRef.current = id
+      setActive(id)
+      setLine(0)
+      setNudge(false)
+      lastHelpRef.current = Date.now()
+      setBurst((n) => n + 1)
+      setBounce((n) => n + 1)
+      setMood(id === 'contact' || id === 'work' ? 'hype' : 'tip')
+      moveTo(randomPose(poseRef.current))
+      playExplain(id)
+    }
 
-        const id = best.target.id
-        activeRef.current = id
-        setActive(id)
-        setLine(0)
-        setOpen(true)
-        setNudge(false)
-        lastHelpRef.current = Date.now()
-        setBurst((n) => n + 1)
-        setBounce((n) => n + 1)
-        setMood(id === 'contact' || id === 'work' ? 'hype' : 'tip')
-        if (modeRef.current === 'guide') moveTo(sectionPose(id))
-
-        const spot = SCRIPT[id]
-        window.setTimeout(() => {
-          if (id === 'contact') apiRef.current?.celebrate?.(4200)
-          else if (id === 'skills') apiRef.current?.combo?.()
-          else if (id === 'resume') {
-            apiRef.current?.flip?.()
-            window.setTimeout(() => apiRef.current?.playEmote('Jump'), 220)
-          } else if (id === 'work') {
-            apiRef.current?.boost?.()
-            apiRef.current?.playEmote?.('ThumbsUp')
-          } else if (id === 'impact') {
-            apiRef.current?.playEmote?.('Yes')
-            apiRef.current?.boost?.()
-          } else if (spot?.emote) apiRef.current?.playEmote(spot.emote)
-          apiRef.current?.setExpression(spot?.face ?? null)
-          window.setTimeout(() => apiRef.current?.setExpression(null), 2200)
-        }, 500)
-      },
-      { threshold: [0.18, 0.35, 0.55], rootMargin: '-12% 0px -42% 0px' }
-    )
-    els.forEach((el) => io.observe(el))
-    return () => io.disconnect()
-  }, [moveTo, reduce])
+    const sync = () => apply(readActiveSection())
+    sync()
+    window.addEventListener('scroll', sync, { passive: true })
+    window.addEventListener('resize', sync)
+    return () => {
+      window.removeEventListener('scroll', sync)
+      window.removeEventListener('resize', sync)
+    }
+  }, [moveTo, playExplain, reduce])
 
   useEffect(() => {
     if (reduce || nudge) return undefined
@@ -627,28 +577,36 @@ export default function GuideRobot({ onDismiss }) {
     return () => clearInterval(id)
   }, [active, reduce, nudge])
 
+  useEffect(() => {
+    if (reduce) return undefined
+    const emotes = SCRIPT[active]?.emote
+    if (line === 0) return undefined
+    apiRef.current?.playEmote?.(emotes || 'Wave')
+    setBurst((n) => n + 1)
+    return undefined
+  }, [line, active, reduce])
+
   const script = SCRIPT[active] || SCRIPT.home
-  const stepIdx = Math.max(0, ORDER.indexOf(active))
-  const prevId = stepIdx > 0 ? ORDER[stepIdx - 1] : null
-  const nextId = stepIdx < ORDER.length - 1 ? ORDER[stepIdx + 1] : null
+  const stepIdx = Math.max(0, SECTION_IDS.indexOf(active))
+  const nextId = stepIdx < SECTION_IDS.length - 1 ? SECTION_IDS[stepIdx + 1] : null
   const text = nudge
     ? nextId
-      ? `Still exploring? Tap Next for ${SCRIPT[nextId]?.label || 'the next stop'} — or click me for a tip.`
+      ? `Still exploring? Scroll on to ${SCRIPT[nextId]?.label || 'the next stop'} — or click me for a tip.`
       : 'You are at the finish — Email Sujay or Back to top when ready.'
     : script.lines[line % script.lines.length]
   const typed = useTypedText(text, !reduce)
   const heroMode = mode === 'hero'
+  const nearTop = pose.top < 158
   const bubbleSide = pose.left + pose.width / 2 < window.innerWidth / 2 ? 'left-0' : 'right-0'
-  const actions = script.actions || []
 
   const onRobotClick = () => {
     markHelp()
     clickCombo.current = (clickCombo.current + 1) % 5
-    setOpen(true)
     setBurst((n) => n + 1)
     setBounce((n) => n + 1)
     setLine((i) => (i + 1) % script.lines.length)
     setMood('hype')
+    moveTo(randomPose(poseRef.current))
     if (clickCombo.current === 0) apiRef.current?.combo?.()
     else if (clickCombo.current === 1) apiRef.current?.celebrate?.(4200)
     else if (clickCombo.current === 2) {
@@ -688,12 +646,12 @@ export default function GuideRobot({ onDismiss }) {
         animate={{
           opacity: 1,
           scale: bounce % 2 === 0 ? 1 : [1, 1.08, 1],
-          rotate: mood === 'hype' ? [0, -3, 3, 0] : nudge ? [0, -1.5, 1.5, 0] : 0,
+          rotate: mood === 'hype' ? [0, -8, 6, 0] : nudge ? [0, -1.5, 1.5, 0] : [0, 2, -2, 0],
           left: pose.left,
           top: pose.top,
           width: pose.width,
           height: pose.height,
-          y: 0,
+          y: [0, -26, 0],
         }}
         transition={{
           left: { duration: pose.ms / 1000, ease: [0.45, 0, 0.55, 1] },
@@ -702,23 +660,22 @@ export default function GuideRobot({ onDismiss }) {
           height: { duration: 0.55, ease: easeOut },
           opacity: { duration: 0.4 },
           scale: springCrazy,
-          rotate: { duration: 1.1, repeat: mood === 'hype' || nudge ? 1 : 0 },
-          y: springStamp,
+          rotate: { duration: pose.ms / 1000, ease: easeOut },
+          y: { duration: Math.min(0.65, pose.ms / 1000), ease: [0.22, 1, 0.36, 1] },
         }}
       >
         <SparkBurst burst={burst} />
 
         <AnimatePresence mode="wait">
-          {open && (
-            <motion.div
+          <motion.div
               key={`${active}-${line}-${nudge ? 'nudge' : 'line'}`}
               initial={{ opacity: 0, y: 24, scale: 0.82, rotate: -4 }}
               animate={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
               exit={{ opacity: 0, y: -12, scale: 0.9, rotate: 3 }}
               transition={springStamp}
               className={`pointer-events-auto absolute ${bubbleSide} ${
-                heroMode ? '-top-40 w-[min(352px,86vw)]' : '-top-36 w-[min(318px,80vw)]'
-              } rounded-2xl bg-gradient-to-br from-[var(--ink)] via-[var(--ink)]/55 to-[var(--signal)]/30 p-[1.5px] shadow-[0_20px_55px_-12px_rgba(0,0,0,0.5)]`}
+                nearTop ? 'top-full mt-2' : '-top-36'
+              } w-[min(318px,80vw)] rounded-2xl bg-gradient-to-br from-[var(--ink)] via-[var(--ink)]/55 to-[var(--signal)]/30 p-[1.5px] shadow-[0_20px_55px_-12px_rgba(0,0,0,0.5)]`}
             >
               <div className="relative overflow-hidden rounded-[calc(1rem-1.5px)] bg-[var(--bg-elevated)]/96 backdrop-blur-xl">
                 <motion.div
@@ -741,12 +698,12 @@ export default function GuideRobot({ onDismiss }) {
                       </span>
                     </div>
                     <span className="rounded-full bg-[color-mix(in_srgb,var(--signal)_14%,transparent)] px-2 py-0.5 font-mono text-[8px] font-bold uppercase tracking-wider text-[var(--signal)]">
-                      {stepIdx + 1}/{ORDER.length}
+                      {stepIdx + 1}/{SECTION_IDS.length}
                     </span>
                   </div>
 
                   <div className="mb-2.5 flex gap-0.5" role="navigation" aria-label="Tour sections">
-                    {ORDER.map((id, i) => (
+                    {SECTION_IDS.map((id, i) => (
                       <motion.button
                         key={id}
                         type="button"
@@ -774,46 +731,6 @@ export default function GuideRobot({ onDismiss }) {
                     )}
                   </p>
 
-                  <div className="mt-3 flex flex-wrap gap-1.5">
-                    {prevId && (
-                      <motion.button
-                        type="button"
-                        data-cursor="go"
-                        onClick={() => goSection(prevId)}
-                        whileHover={{ scale: 1.06, y: -2 }}
-                        whileTap={{ scale: 0.96 }}
-                        className="rounded-full border border-[var(--line)] bg-transparent px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--ink)]"
-                      >
-                        Prev
-                      </motion.button>
-                    )}
-                    {actions.map((a) => (
-                      <motion.button
-                        key={a.id + a.label}
-                        type="button"
-                        data-cursor="go"
-                        onClick={() => runAction(a)}
-                        whileHover={{ scale: 1.06, y: -2 }}
-                        whileTap={{ scale: 0.96 }}
-                        className="rounded-full border border-[var(--ink)] bg-[var(--ink)] px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--bg)]"
-                      >
-                        {a.label}
-                      </motion.button>
-                    ))}
-                    {nextId && !actions.some((a) => a.go === nextId) && (
-                      <motion.button
-                        type="button"
-                        data-cursor="go"
-                        onClick={() => goSection(nextId)}
-                        whileHover={{ scale: 1.06, y: -2 }}
-                        whileTap={{ scale: 0.96 }}
-                        className="rounded-full border border-[var(--signal)] bg-[color-mix(in_srgb,var(--signal)_18%,transparent)] px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--ink)]"
-                      >
-                        Next
-                      </motion.button>
-                    )}
-                  </div>
-
                   {script.lines.length > 1 && (
                     <div className="mt-2.5 flex gap-1">
                       {script.lines.map((l, i) => (
@@ -840,37 +757,8 @@ export default function GuideRobot({ onDismiss }) {
                   </p>
                 </div>
               </div>
-              <button
-                type="button"
-                aria-label="Dismiss tour guide"
-                title="Dismiss tour guide"
-                onClick={turnOff}
-                className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full border border-[var(--ink)] bg-[var(--bg)] text-[10px] font-bold text-[var(--ink)] shadow transition hover:scale-110"
-              >
-                ×
-              </button>
             </motion.div>
-          )}
         </AnimatePresence>
-
-        {!open && (
-          <motion.button
-            type="button"
-            aria-label="Show guide"
-            onClick={() => {
-              markHelp()
-              setOpen(true)
-              apiRef.current?.playEmote?.('Wave')
-            }}
-            initial={{ opacity: 0, scale: 0.7 }}
-            animate={{ opacity: 1, scale: 1, y: [0, -3, 0] }}
-            whileHover={{ scale: 1.08, rotate: -3 }}
-            transition={{ y: { duration: 1.4, repeat: Infinity }, duration: 0.25, ease: easeOut }}
-            className={`pointer-events-auto absolute -top-9 ${bubbleSide} rounded-full border-2 border-[var(--ink)] bg-[var(--bg-elevated)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-[var(--ink)] shadow-lg`}
-          >
-            Need a tip?
-          </motion.button>
-        )}
 
         <motion.div
           className="h-full w-full"

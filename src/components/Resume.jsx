@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { FaDownload, FaFilePdf, FaExternalLinkAlt } from 'react-icons/fa'
-import { SectionTitle, Reveal } from './motion/Reveal'
+import { SectionTitle } from './motion/Reveal'
+import { ClipReveal } from './motion/ScrollFX'
 import { springStamp } from '../lib/motion'
 
 export const RESUME_PATH = '/Sujay-Kumar-Resume.pdf'
@@ -16,7 +17,7 @@ const Resume = () => (
         />
       </div>
 
-      <Reveal variant="fade">
+      <ClipReveal from="bottom" duration={0.8}>
         <motion.div
           whileHover={{ y: -4 }}
           transition={springStamp}
@@ -71,7 +72,7 @@ const Resume = () => (
             />
           </div>
         </motion.div>
-      </Reveal>
+      </ClipReveal>
     </div>
   </section>
 )

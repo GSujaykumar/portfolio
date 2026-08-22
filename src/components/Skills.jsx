@@ -43,7 +43,8 @@ import {
   SiOracle,
   SiApachemaven,
 } from 'react-icons/si'
-import { SectionTitle, Marquee } from './motion/Reveal'
+import { SectionTitle } from './motion/Reveal'
+import { SplitWords } from './motion/ScrollFX'
 import { easeOut, springStamp, viewportOnce } from '../lib/motion'
 
 const KEY_TERMS = [
@@ -103,7 +104,7 @@ const groups = [
     blurb: 'Events, resilience, and service boundaries that hold under load.',
     items: [
       { name: 'Microservices', icon: FaDiagramProject, tag: 'Architecture', color: '#14B8A6' },
-      { name: 'Apache Kafka', icon: SiApachekafka, tag: 'Messaging', color: '#52525B' },
+      { name: 'Apache Kafka', icon: SiApachekafka, tag: 'Messaging', color: '#D4D4D8' },
       { name: 'Transactional outbox', icon: FaBoxOpen, tag: 'Reliability', color: '#CA8A04' },
       { name: 'Idempotency & retries', icon: FaArrowsRotate, tag: 'Safety', color: '#0891B2' },
       { name: 'Resilience4j', icon: FaBolt, tag: 'Resilience', color: '#D97706' },
@@ -132,7 +133,7 @@ const groups = [
       { name: 'Docker', icon: SiDocker, tag: 'Containers', color: '#2496ED' },
       { name: 'Jenkins', icon: SiJenkins, tag: 'CI/CD', color: '#D24939' },
       { name: 'GitHub Actions', icon: SiGithubactions, tag: 'CI/CD', color: '#2088FF' },
-      { name: 'Git · GitHub', icon: FaGithub, tag: 'VCS', color: '#3F3F46' },
+      { name: 'Git · GitHub', icon: FaGithub, tag: 'VCS', color: '#E4E4E7' },
       { name: 'Maven', icon: SiApachemaven, tag: 'Build', color: '#C71A36' },
     ],
   },
@@ -188,7 +189,7 @@ function groupForTerm(term) {
   )
 }
 
-function planetPoint(index, count, radius = 42) {
+function planetPoint(index, count, radius = 38) {
   const angle = (Math.PI * 2 * index) / count - Math.PI / 2
   return {
     left: `${50 + Math.cos(angle) * radius}%`,
@@ -274,65 +275,61 @@ function TechOrbit({ group, focus, onFocus, reduce }) {
       <div className="skill-radar skill-radar--b" aria-hidden />
       <div className="skill-sweep" aria-hidden />
 
-      <AnimatePresence>
-        <motion.div
-          key={group.id}
-          className="skill-ring-wrap"
-          initial={{ opacity: 0, scale: 0.86 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.9 }}
-          transition={{ duration: 0.28, ease: easeOut }}
-        >
-          <div className={`skill-ring ${reduce ? 'skill-ring--still' : ''}`}>
-            {items.map((item, i) => {
-              const Icon = item.icon
-              const selected = item.name === active.name
-              return (
-                <button
-                  key={item.name}
-                  type="button"
-                  data-cursor="go"
-                  className={`skill-planet ${selected ? 'skill-planet--on' : ''} ${reduce ? 'skill-planet--still' : ''}`}
-                  style={{ ...planetPoint(i, count), '--skill-color': item.color }}
-                  aria-label={item.name}
-                  aria-pressed={selected}
-                  onPointerEnter={() => onFocus(item.name)}
-                  onFocus={() => onFocus(item.name)}
-                  onClick={() => onFocus(item.name)}
+      <div className={`skill-ring ${reduce ? 'skill-ring--still' : ''}`}>
+        {items.map((item, i) => {
+          const Icon = item.icon
+          const selected = item.name === active.name
+          return (
+            <div
+              key={item.name}
+              className={`skill-planet-slot ${reduce ? 'skill-planet-slot--still' : ''}`}
+              style={planetPoint(i, count)}
+            >
+              <button
+                type="button"
+                data-cursor="go"
+                className={`skill-planet ${selected ? 'skill-planet--on' : ''}`}
+                style={{ '--skill-color': item.color }}
+                aria-label={item.name}
+                aria-pressed={selected}
+                onPointerEnter={() => onFocus(item.name)}
+                onFocus={() => onFocus(item.name)}
+                onClick={() => onFocus(item.name)}
+              >
+                <motion.span
+                  className="skill-planet-face"
+                  initial={reduce ? false : { opacity: 0, scale: 0.35 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: i * 0.05, duration: 0.35, ease: easeOut }}
                 >
-                  <span className="skill-planet-face">
-                    <Icon aria-hidden />
-                  </span>
-                  <span className="skill-planet-name">{item.name.split('·')[0].trim()}</span>
-                </button>
-              )
-            })}
-          </div>
-        </motion.div>
-      </AnimatePresence>
+                  <Icon aria-hidden />
+                </motion.span>
+                <span className="skill-planet-name">{item.name.split('·')[0].trim()}</span>
+              </button>
+            </div>
+          )
+        })}
+      </div>
 
       <div className="skill-core">
-        <AnimatePresence>
-          <motion.div
-            key={`${group.id}-${active.name}`}
-            initial={{ opacity: 0, scale: 0.82 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            transition={{ duration: 0.22, ease: easeOut }}
-            className="skill-core-inner"
-            style={{ '--skill-color': active.color }}
+        <motion.div
+          key={`${group.id}-${active.name}`}
+          initial={{ opacity: 0, scale: 0.78 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.28, ease: easeOut }}
+          className="skill-core-inner"
+          style={{ '--skill-color': active.color }}
+        >
+          <motion.span
+            className="skill-core-icon"
+            animate={reduce ? undefined : { y: [0, -6, 0] }}
+            transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
           >
-            <motion.span
-              className="skill-core-icon"
-              animate={reduce ? undefined : { y: [0, -7, 0], rotate: [0, -5, 5, 0] }}
-              transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              <ActiveIcon aria-hidden />
-            </motion.span>
-            <span className="skill-core-label">{active.name}</span>
-            <span className="skill-core-tag">{active.tag}</span>
-          </motion.div>
-        </AnimatePresence>
+            <ActiveIcon aria-hidden />
+          </motion.span>
+          <span className="skill-core-label">{active.name}</span>
+          <span className="skill-core-tag">{active.tag}</span>
+        </motion.div>
       </div>
     </div>
   )
@@ -356,7 +353,7 @@ function SpotlightPanel({ children, className = '', style, ...rest }) {
         mx.set(((e.clientX - r.left) / r.width) * 100)
         my.set(((e.clientY - r.top) / r.height) * 100)
       }}
-      className={`soft-panel card-shine relative overflow-hidden ${className}`}
+      className={`soft-panel card-shine relative ${className}`}
     >
       <motion.div aria-hidden style={{ background }} className="pointer-events-none absolute inset-0" />
       <div className="relative z-[1]">{children}</div>
@@ -403,13 +400,6 @@ const Skills = () => {
       className="relative overflow-hidden py-24 md:py-32"
       style={{ '--lane-accent': current.accent }}
     >
-      <div className="pointer-events-none absolute inset-x-0 top-10 -rotate-2 opacity-30">
-        <Marquee items={KEY_TERMS.slice(0, 16)} />
-      </div>
-      <div className="pointer-events-none absolute inset-x-0 bottom-16 rotate-2 opacity-20">
-        <Marquee reverse items={KEY_TERMS.slice(16)} />
-      </div>
-
       <div className="relative z-10 mx-auto max-w-6xl px-6 md:px-10">
         <div className="mb-12">
           <SectionTitle
@@ -432,9 +422,11 @@ const Skills = () => {
                 <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--text-faint)]">
                   Live constellation
                 </p>
-                <h3 className="mt-2 font-display text-2xl text-[var(--ink)] md:text-3xl">
-                  Pick a lane. Icons lock on.
-                </h3>
+                <SplitWords
+                  as="h3"
+                  className="mt-2 font-display text-2xl text-[var(--ink)] md:text-3xl"
+                  text="Pick a lane. Icons lock on."
+                />
               </div>
               <span className="skill-live-dot" aria-hidden />
             </div>
@@ -482,7 +474,7 @@ const Skills = () => {
           </SpotlightPanel>
 
           <SpotlightPanel
-            className="p-6 md:p-8"
+            className="overflow-hidden p-6 md:p-8"
             onPointerEnter={() => setPaused(true)}
             onPointerLeave={() => setPaused(false)}
           >

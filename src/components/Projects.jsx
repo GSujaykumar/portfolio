@@ -1,15 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
-import {
-  motion,
-  useMotionValueEvent,
-  useScroll,
-  useSpring,
-  useTransform,
-  useReducedMotion,
-} from 'framer-motion'
+import { useReducedMotion } from 'framer-motion'
 import { FaArrowUpRightFromSquare, FaGithub } from 'react-icons/fa6'
 import { PROJECT_UI } from './ProjectUIs'
-import { easeOut } from '../lib/motion'
+import { SplitWords } from './motion/ScrollFX'
+import { refreshLenis } from './SmoothScroll'
 
 const FUSION_GH = 'https://github.com/GSujaykumar/-Oracel-Fusion-WorkSpace'
 const PORTFOLIO_GH = 'https://github.com/GSujaykumar/portfolio'
@@ -22,12 +16,11 @@ const projects = [
     short: 'Fusion Console',
     category: 'Fusion · Platform',
     status: 'Production',
-    outcome: 'Live operator console — modules, mail, SQL, API runner, Daily Checker',
+    outcome: 'Live generate console — 1.8k proven queries, 30k–1M capacity table, mail + Daily Checker',
     github: FUSION_GH,
     summary:
-      'The real Fusion Console from this workspace: drop Excel → SQL / upload, mail history, API presets, and launchers operators run every day.',
-    tech: 'React · Vite · Java 17 · Spring Boot · Oracle DB · PowerShell',
-    keywords: ['Oracle Fusion', 'Excel → SQL', 'Mail drop', 'API Runner', 'Live console'],
+      'Live Fusion Console: Excel → SQL generate with real throughput limits (1.8k proven, 100k+ OOM). Mail drop, API runner, Daily Checker — operators run this every day.',
+    keywords: ['Oracle Fusion', 'Excel → SQL', 'Live generate', 'Mail drop', 'API Runner'],
   },
   {
     id: 'daily',
@@ -87,324 +80,228 @@ const projects = [
   },
 ]
 
-function ProjectSlide({ project, scrollProgress, index, total, active }) {
-  const UI = PROJECT_UI[project.id]
-  const start = index / Math.max(1, total - 1)
-  const prev = Math.max(0, start - 0.22)
-  const next = Math.min(1, start + 0.22)
-
-  const scale = useTransform(scrollProgress, [prev, start, next], [0.88, 1, 0.88])
-  const rotateY = useTransform(scrollProgress, [prev, start, next], [14, 0, -14])
-  const opacity = useTransform(scrollProgress, [prev, start, next], [0.35, 1, 0.35])
-  const y = useTransform(scrollProgress, [prev, start, next], [36, 0, 36])
-  const blur = useTransform(scrollProgress, [prev, start, next], [6, 0, 6])
-  const filter = useTransform(blur, (b) => `blur(${b}px)`)
-
-  return (
-    <motion.article
-      style={{ scale, rotateY, opacity, y, filter, transformPerspective: 1600 }}
-      className={`project-slide relative flex w-[min(100vw,1080px)] shrink-0 items-center px-4 md:px-8 ${
-        active ? 'project-slide--active' : ''
-      }`}
-      aria-current={active ? 'true' : undefined}
-    >
-      <div className="grid w-full items-center gap-5 lg:grid-cols-[0.95fr_1.05fr] lg:gap-8">
-        <div className="order-2 lg:order-1">
-          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--signal)]">
-            {project.index} — {project.category}
-          </p>
-          <h3 className="mt-3 font-display text-[clamp(1.9rem,4.6vw,3.3rem)] leading-[0.92] text-[var(--ink)]">
-            {project.title}
-          </h3>
-          <p className="mt-4 max-w-xl text-sm leading-relaxed text-[var(--text-muted)] md:text-base">
-            {project.summary}
-          </p>
-          {project.outcome && (
-            <p className="mt-3 max-w-xl border-l-2 border-[var(--signal)] pl-3 font-mono text-[11px] leading-relaxed text-[var(--ink)] md:text-xs">
-              {project.outcome}
-            </p>
-          )}
-          <p className="mt-4 font-mono text-[11px] leading-relaxed text-[var(--text-faint)]">{project.tech}</p>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {project.keywords.map((k) => (
-              <span
-                key={k}
-                className="rounded-md border border-[var(--line)] bg-[var(--bg-elevated)] px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-faint)]"
-              >
-                {k}
-              </span>
-            ))}
-          </div>
-          <div className="mt-6 flex flex-wrap items-center gap-3">
-            <span
-              className={`rounded-full px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] ${
-                project.status === 'Production' || project.status === 'Shipped'
-                  ? 'bg-[color-mix(in_srgb,var(--signal)_16%,transparent)] text-[var(--signal)]'
-                  : 'bg-[var(--bg-soft)] text-[var(--text-faint)]'
-              }`}
-            >
-              {project.status}
-            </span>
-            {project.github ? (
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-cursor="go"
-                className="inline-flex items-center gap-2 rounded-full border border-[var(--ink)] bg-[var(--ink)] px-4 py-2 text-sm font-semibold text-[var(--bg)]"
-              >
-                <FaGithub />
-                GitHub
-                <FaArrowUpRightFromSquare className="text-xs" />
-              </a>
-            ) : (
-              <span className="inline-flex items-center gap-2 rounded-full border border-[var(--line)] bg-[var(--bg-elevated)] px-4 py-2 text-sm font-semibold text-[var(--text-faint)]">
-                Private · architecture notes
-              </span>
-            )}
-          </div>
-        </div>
-
-        <motion.div className="project-ui-stage order-1 lg:order-2">
-          {UI ? <UI /> : null}
-        </motion.div>
-      </div>
-    </motion.article>
-  )
+function scrollPageBy(dy) {
+  const lenis = window.__lenis
+  if (lenis) {
+    lenis.scrollTo(window.scrollY + dy, { immediate: true })
+    return
+  }
+  window.scrollBy(0, dy)
 }
 
-function StackedProjects() {
-  return (
-    <section id="work" className="relative z-10 bg-[var(--bg)] py-24 md:py-32">
-      <div className="mx-auto grid max-w-6xl gap-12 px-6 md:px-10">
-        <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--signal)]">Projects</p>
-          <h2 className="mt-2 font-display text-4xl text-[var(--ink)] md:text-6xl">Selected work</h2>
-          <p className="mt-3 max-w-xl text-[var(--text-muted)]">
-            Production Fusion Console, Teams Adaptive Card, payments outbox, AlgoLens, and this site.
-          </p>
-        </div>
-        {projects.map((p) => {
-          const UI = PROJECT_UI[p.id]
-          return (
-            <article
-              key={p.id}
-              className="grid items-center gap-6 rounded-[1.6rem] border border-[var(--line)] bg-[var(--bg-elevated)] p-5 md:p-8 lg:grid-cols-2"
-            >
-              <div>{UI ? <UI /> : null}</div>
-              <div>
-                <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--signal)]">
-                  {p.index} — {p.category}
-                </p>
-                <h3 className="mt-2 font-display text-3xl text-[var(--ink)]">{p.title}</h3>
-                <p className="mt-3 text-[var(--text-muted)]">{p.summary}</p>
-                {p.outcome && (
-                  <p className="mt-3 border-l-2 border-[var(--signal)] pl-3 font-mono text-xs text-[var(--ink)]">
-                    {p.outcome}
-                  </p>
-                )}
-                <p className="mt-4 font-mono text-[11px] leading-relaxed text-[var(--text-faint)]">{p.tech}</p>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {p.keywords.map((k) => (
-                    <span
-                      key={k}
-                      className="rounded-md border border-[var(--line)] bg-[var(--bg)] px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-faint)]"
-                    >
-                      {k}
-                    </span>
-                  ))}
-                </div>
-                <div className="mt-4 flex flex-wrap items-center gap-3">
-                  <span
-                    className={`rounded-full px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] ${
-                      p.status === 'Production' || p.status === 'Shipped'
-                        ? 'bg-[color-mix(in_srgb,var(--signal)_16%,transparent)] text-[var(--signal)]'
-                        : 'bg-[var(--bg-soft)] text-[var(--text-faint)]'
-                    }`}
-                  >
-                    {p.status}
-                  </span>
-                  {p.github && (
-                    <a
-                      href={p.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--ink)] underline-offset-4 hover:underline"
-                    >
-                      <FaGithub /> GitHub
-                    </a>
-                  )}
-                </div>
-              </div>
-            </article>
-          )
-        })}
-      </div>
-    </section>
-  )
+function scrollPageTo(y, smooth) {
+  const lenis = window.__lenis
+  if (lenis) {
+    if (!smooth) {
+      lenis.scrollTo(y, { immediate: true })
+      return
+    }
+    lenis.scrollTo(y, { duration: 0.9, easing: (t) => 1 - (1 - t) ** 3 })
+    return
+  }
+  window.scrollTo({ top: y, behavior: smooth ? 'smooth' : 'auto' })
 }
 
 export default function Projects() {
   const reduce = useReducedMotion()
-  const sectionRef = useRef(null)
+  const pinRef = useRef(null)
+  const stickyRef = useRef(null)
   const trackRef = useRef(null)
-  const [active, setActive] = useState(0)
-  const [maxX, setMaxX] = useState(0)
-  const [stacked, setStacked] = useState(() => {
-    if (typeof window === 'undefined') return false
-    return window.matchMedia('(max-width: 767px)').matches
-  })
+  const indexRef = useRef(0)
+  const [index, setIndex] = useState(0)
+  const count = projects.length
 
   useEffect(() => {
-    const mq = window.matchMedia('(max-width: 767px)')
-    const apply = () => setStacked(mq.matches)
-    apply()
-    mq.addEventListener('change', apply)
-    return () => mq.removeEventListener('change', apply)
-  }, [])
+    const pin = pinRef.current
+    const track = trackRef.current
+    if (!pin || !track) return undefined
 
-  // While this tall section is pinned, page Y scroll drives X on the track.
-  // Progress 0→1 = first→last project; past end, sticky releases → normal vertical scroll.
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
-  })
-
-  const smooth = useSpring(scrollYProgress, { stiffness: 55, damping: 22, mass: 0.45 })
-  const x = useTransform(smooth, [0, 1], [0, -maxX])
-
-  useEffect(() => {
-    const measure = () => {
-      const track = trackRef.current
-      if (!track) return
-      setMaxX(Math.max(0, track.scrollWidth - window.innerWidth))
+    let raf = 0
+    const apply = () => {
+      raf = 0
+      const total = pin.offsetHeight - window.innerHeight
+      const scrolled = Math.min(total, Math.max(0, -pin.getBoundingClientRect().top))
+      const p = total > 0 ? scrolled / total : 0
+      const x = p * (count - 1)
+      track.style.transform = `translate3d(${-x * 100}vw, 0, 0)`
+      const next = Math.round(x)
+      if (next !== indexRef.current) {
+        indexRef.current = next
+        setIndex(next)
+      }
+      const pinning = p > 0.001 && p < 0.999
+      document.documentElement.toggleAttribute('data-projects-pin', pinning)
     }
-    measure()
-    const id = window.setTimeout(measure, 120)
-    const id2 = window.setTimeout(measure, 500)
-    window.addEventListener('resize', measure)
-    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(measure) : null
-    if (trackRef.current && ro) ro.observe(trackRef.current)
+
+    const onScroll = () => {
+      if (raf) return
+      raf = window.requestAnimationFrame(apply)
+    }
+
+    apply()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    const id = window.setTimeout(() => refreshLenis(), 80)
     return () => {
       window.clearTimeout(id)
-      window.clearTimeout(id2)
-      window.removeEventListener('resize', measure)
-      ro?.disconnect()
+      if (raf) window.cancelAnimationFrame(raf)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      document.documentElement.removeAttribute('data-projects-pin')
     }
-  }, [])
+  }, [count])
 
   useEffect(() => {
-    const onScroll = () => {
-      const el = sectionRef.current
-      if (!el) return
-      const r = el.getBoundingClientRect()
-      const pinned = r.top <= 8 && r.bottom >= window.innerHeight - 8
-      document.documentElement.dataset.projectsPin = pinned ? '1' : '0'
+    const sticky = stickyRef.current
+    const pin = pinRef.current
+    if (!sticky || !pin || reduce) return undefined
+
+    const onWheel = (e) => {
+      const r = pin.getBoundingClientRect()
+      const pinned = r.top <= 1 && r.bottom >= window.innerHeight - 1
+      if (!pinned) return
+      if (e.ctrlKey) return
+      const dy = e.deltaY !== 0 ? e.deltaY : e.deltaX
+      if (!dy) return
+      e.preventDefault()
+      scrollPageBy(dy)
     }
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      delete document.documentElement.dataset.projectsPin
-    }
-  }, [])
 
-  useMotionValueEvent(smooth, 'change', (v) => {
-    const i = Math.min(projects.length - 1, Math.max(0, Math.round(v * (projects.length - 1))))
-    setActive(i)
-  })
+    sticky.addEventListener('wheel', onWheel, { passive: false })
+    return () => sticky.removeEventListener('wheel', onWheel)
+  }, [reduce])
 
-  const jumpTo = (index) => {
-    const section = sectionRef.current
-    if (!section) return
-    const top = window.scrollY + section.getBoundingClientRect().top
-    const travel = Math.max(1, section.offsetHeight - window.innerHeight)
-    const y = top + (index / Math.max(1, projects.length - 1)) * travel
-    const lenis = window.__lenis
-    if (lenis && !reduce) lenis.scrollTo(y, { duration: 1.25, easing: (t) => 1 - Math.pow(1 - t, 3.2) })
-    else window.scrollTo({ top: y, behavior: reduce ? 'auto' : 'smooth' })
-  }
-
-  if (reduce || stacked) {
-    return <StackedProjects />
+  const jumpTo = (i) => {
+    const pin = pinRef.current
+    if (!pin) return
+    const total = pin.offsetHeight - window.innerHeight
+    const start = window.scrollY + pin.getBoundingClientRect().top
+    const t = count <= 1 ? 0 : i / (count - 1)
+    scrollPageTo(start + t * total, true)
   }
 
   return (
     <section
       id="work"
-      ref={sectionRef}
-      className="projects-pin relative z-10 bg-[var(--bg)]"
-      style={{ height: `${(projects.length + 0.35) * 100}vh` }}
+      ref={pinRef}
+      className="projects-pin relative z-10"
+      style={{ height: `${Math.max(count, 1) * 100}vh` }}
     >
-      {/* Sticky stage: vertical wheel → horizontal until last project, then page unlocks */}
-      <div className="projects-sticky sticky top-0 isolate flex h-[100svh] max-h-[100dvh] flex-col overflow-hidden bg-[var(--bg)]">
-        <div className="pointer-events-none absolute inset-0" aria-hidden>
-          <div className="absolute -left-20 top-1/4 h-[40vmax] w-[40vmax] rounded-full bg-[color-mix(in_srgb,var(--signal)_14%,transparent)] blur-3xl" />
-          <div className="absolute -right-16 bottom-1/4 h-[36vmax] w-[36vmax] rounded-full bg-[color-mix(in_srgb,var(--hot)_12%,transparent)] blur-3xl" />
-        </div>
-
-        <div className="relative z-[2] flex shrink-0 items-end justify-between gap-4 px-6 pb-2 pt-8 md:px-10 md:pt-10">
-          <div>
+      <div
+        ref={stickyRef}
+        className="projects-sticky flex h-[100svh] flex-col overflow-hidden bg-[color-mix(in_srgb,var(--bg)_82%,transparent)]"
+      >
+        <div className="flex shrink-0 items-end justify-between gap-4 px-6 pb-3 pt-20 md:px-10 md:pt-24">
+          <div className="min-w-0">
             <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-[var(--signal)]">Projects</p>
-            <h2 className="mt-2 font-display text-[clamp(2.1rem,5.5vw,4.2rem)] leading-[0.9] text-[var(--ink)]">
-              Work that moves with you.
-            </h2>
-            <p className="mt-3 max-w-md text-sm text-[var(--text-muted)]">
-              Soft horizontal glide across real product UIs — then the page continues down.
+            <h2 className="mt-1 font-display text-3xl text-[var(--ink)] md:text-5xl">Selected work</h2>
+            <p className="mt-1 hidden max-w-xl text-sm text-[var(--text-muted)] sm:block">
+              Scroll or wheel — vertical movement still drives this lane sideways.
             </p>
           </div>
-          <div className="hidden text-right sm:block">
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--text-faint)]">Active</p>
-            <p className="mt-1 font-display text-xl text-[var(--ink)]">{projects[active]?.short}</p>
-            <p className="font-mono text-sm text-[var(--text-faint)]">
-              {String(active + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}
+          <div className="flex flex-col items-end gap-2">
+            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--text-faint)]">
+              {String(index + 1).padStart(2, '0')} / {String(count).padStart(2, '0')}
             </p>
+            <div className="flex flex-wrap justify-end gap-1.5">
+              {projects.map((p, i) => (
+                <button
+                  key={p.id}
+                  type="button"
+                  data-cursor="go"
+                  aria-label={`Show ${p.short}`}
+                  aria-current={i === index}
+                  onClick={() => jumpTo(i)}
+                  className={`rounded-full px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] transition ${
+                    i === index
+                      ? 'bg-[var(--ink)] text-[var(--bg)]'
+                      : 'border border-[var(--line)] text-[var(--text-faint)] hover:border-[var(--ink)] hover:text-[var(--ink)]'
+                  }`}
+                >
+                  {p.index} {p.short}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
-        <div className="relative z-[2] min-h-0 flex-1 overflow-hidden">
-          <motion.div ref={trackRef} style={{ x }} className="flex h-full items-center will-change-transform">
-            <div className="w-[2vw] shrink-0 md:w-[5vw]" aria-hidden />
-            {projects.map((project, i) => (
-              <ProjectSlide
-                key={project.id}
-                project={project}
-                scrollProgress={smooth}
-                index={i}
-                total={projects.length}
-                active={active === i}
-              />
-            ))}
-            <div className="w-[6vw] shrink-0" aria-hidden />
-          </motion.div>
-        </div>
-
-        <div className="relative z-[2] shrink-0 bg-[var(--bg)] px-6 pb-8 pt-2 md:px-10">
-          <div className="h-[3px] overflow-hidden rounded-full bg-[var(--bg-soft)]">
-            <motion.div className="h-full origin-left rounded-full bg-[var(--ink)]" style={{ scaleX: smooth }} />
+        <div className="relative min-h-0 flex-1 overflow-hidden">
+          <div
+            ref={trackRef}
+            className="project-track flex h-full"
+            style={{ width: `${count * 100}vw` }}
+          >
+            {projects.map((p, i) => {
+              const UI = PROJECT_UI[p.id]
+              const on = Math.abs(index - i) <= 1
+              return (
+                <article
+                  key={p.id}
+                  className={`project-slide grid h-full w-screen shrink-0 items-center gap-5 px-6 pb-8 md:px-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-10 ${
+                    i === index ? 'project-slide--active' : ''
+                  }`}
+                >
+                  <div className="min-w-0">
+                    <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--signal)]">
+                      {p.index} — {p.category}
+                    </p>
+                    <h3 className="mt-2 font-display text-3xl text-[var(--ink)] md:text-5xl">{p.title}</h3>
+                    <SplitWords
+                      as="p"
+                      delay={0.04}
+                      gap={0.018}
+                      className="mt-3 max-w-xl text-[var(--text-muted)]"
+                      text={p.summary}
+                    />
+                    {p.outcome && (
+                      <p className="mt-3 border-l-2 border-[var(--signal)] pl-3 font-mono text-xs text-[var(--ink)]">
+                        {p.outcome}
+                      </p>
+                    )}
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {p.keywords.map((k) => (
+                        <span
+                          key={k}
+                          className="rounded-md border border-[var(--line)] bg-[var(--bg-elevated)] px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--text-faint)]"
+                        >
+                          {k}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="mt-4 flex flex-wrap items-center gap-3">
+                      <span
+                        className={`rounded-full px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] ${
+                          p.status === 'Production' || p.status === 'Shipped'
+                            ? 'bg-[color-mix(in_srgb,var(--signal)_16%,transparent)] text-[var(--signal)]'
+                            : 'bg-[var(--bg-soft)] text-[var(--text-faint)]'
+                        }`}
+                      >
+                        {p.status}
+                      </span>
+                      {p.github && (
+                        <a
+                          href={p.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--ink)] underline-offset-4 hover:underline"
+                        >
+                          <FaGithub /> GitHub
+                          <FaArrowUpRightFromSquare className="text-xs" />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                  <div className="project-ui-stage min-w-0">
+                    {on && UI ? (
+                      <UI />
+                    ) : (
+                      <div className="min-h-[280px] rounded-[1.15rem] bg-[var(--bg-soft)] md:min-h-[380px]" />
+                    )}
+                  </div>
+                </article>
+              )
+            })}
           </div>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {projects.map((p, i) => (
-              <button
-                key={p.id}
-                type="button"
-                data-cursor="go"
-                onClick={() => jumpTo(i)}
-                className={`rounded-full border px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] transition ${
-                  active === i
-                    ? 'border-[var(--ink)] bg-[var(--ink)] text-[var(--bg)]'
-                    : 'border-[var(--line)] bg-[var(--bg-elevated)] text-[var(--text-faint)]'
-                }`}
-              >
-                {p.short}
-              </button>
-            ))}
-          </div>
-          <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--text-faint)]">
-            {active < projects.length - 1
-              ? 'Horizontal mode · scroll to next project'
-              : 'Last project · keep scrolling for the rest of the page'}
-          </p>
         </div>
       </div>
     </section>

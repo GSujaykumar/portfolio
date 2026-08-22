@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion'
 import { SectionTitle } from './motion/Reveal'
+import { SplitWords, ClipReveal, DrawLine } from './motion/ScrollFX'
 import PageReveal from './motion/PageReveal'
-import { easeOut, springStamp, viewportOnce } from '../lib/motion'
+import { easeOut, springStamp, viewportReveal } from '../lib/motion'
 
 const Experience = () => {
   const exp = {
@@ -27,36 +28,39 @@ const Experience = () => {
         </div>
 
         <PageReveal>
-          <motion.article
-            whileHover={{ y: -6 }}
-            transition={springStamp}
-            className="soft-panel p-8 hover:shadow-2xl md:p-10"
-          >
-            <div className="grid gap-8 md:grid-cols-12">
-              <div className="md:col-span-4">
-                <p className="font-mono text-xs uppercase tracking-[0.18em] text-[var(--text-faint)]">
-                  {exp.period}
-                </p>
-                <h3 className="mt-3 font-display text-2xl text-[var(--ink)]">{exp.role}</h3>
-                <p className="mt-2 text-[var(--text-muted)]">{exp.company}</p>
-                <p className="mt-1 text-sm text-[var(--text-faint)]">{exp.location}</p>
+          <ClipReveal from="left" duration={0.85}>
+            <motion.article
+              whileHover={{ y: -6 }}
+              transition={springStamp}
+              className="soft-panel p-8 hover:shadow-2xl md:p-10"
+            >
+              <div className="grid gap-8 md:grid-cols-12">
+                <div className="md:col-span-4">
+                  <p className="font-mono text-xs uppercase tracking-[0.18em] text-[var(--text-faint)]">
+                    {exp.period}
+                  </p>
+                  <h3 className="mt-3 font-display text-2xl text-[var(--ink)]">{exp.role}</h3>
+                  <p className="mt-2 text-[var(--text-muted)]">{exp.company}</p>
+                  <p className="mt-1 text-sm text-[var(--text-faint)]">{exp.location}</p>
+                </div>
+                <ul className="relative space-y-4 md:col-span-8">
+                  <DrawLine className="absolute left-[3px] top-2 bottom-2 w-px bg-gradient-to-b from-[var(--signal)] to-transparent" />
+                  {exp.description.map((item, i) => (
+                    <motion.li
+                      key={item}
+                      initial={{ opacity: 0, x: -16 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={viewportReveal}
+                      transition={{ delay: 0.08 + i * 0.08, duration: 0.5, ease: easeOut }}
+                      className="relative pl-5 text-[var(--text-muted)] leading-relaxed before:absolute before:left-0 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-[var(--ink)]"
+                    >
+                      <SplitWords text={item} gap={0.018} delay={0.02} />
+                    </motion.li>
+                  ))}
+                </ul>
               </div>
-              <ul className="space-y-4 md:col-span-8">
-                {exp.description.map((item, i) => (
-                  <motion.li
-                    key={item}
-                    initial={{ opacity: 0, x: -16 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={viewportOnce}
-                    transition={{ delay: 0.05 + i * 0.05, duration: 0.4, ease: easeOut }}
-                    className="relative pl-5 text-[var(--text-muted)] leading-relaxed before:absolute before:left-0 before:top-2.5 before:h-1.5 before:w-1.5 before:rounded-full before:bg-[var(--ink)]"
-                  >
-                    {item}
-                  </motion.li>
-                ))}
-              </ul>
-            </div>
-          </motion.article>
+            </motion.article>
+          </ClipReveal>
         </PageReveal>
       </div>
     </section>

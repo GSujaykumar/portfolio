@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a1220"/>
+      <stop offset="100%" stop-color="#121a2b"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#3ee0c2"/>
+      <stop offset="100%" stop-color="#5b8cff"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+  <rect x="60" y="50" width="1480" height="900" rx="24" fill="#0e1524" stroke="#23304a"/>
+  <circle cx="110" cy="95" r="8" fill="#ff5f57"/>
+  <circle cx="140" cy="95" r="8" fill="#febc2e"/>
+  <circle cx="170" cy="95" r="8" fill="#28c840"/>
+  <text x="210" y="102" fill="#6b7a99" font-family="monospace" font-size="18">Fusion-Ops-Workspace � Auto-Detect</text>
+  <rect x="90" y="140" width="320" height="780" rx="16" fill="#121a2b"/>
+  <text x="120" y="190" fill="#3ee0c2" font-family="sans-serif" font-size="20" font-weight="700">COMMANDS</text>
+  <rect x="120" y="220" width="260" height="48" rx="10" fill="url(#accent)"/>
+  <text x="145" y="250" fill="#070b14" font-family="sans-serif" font-size="16" font-weight="700">� Auto-Detect</text>
+  <rect x="120" y="286" width="260" height="48" rx="10" fill="#1a2438"/>
+  <text x="145" y="316" fill="#eef3ff" font-family="sans-serif" font-size="16">Check-Health</text>
+  <rect x="120" y="352" width="260" height="48" rx="10" fill="#1a2438"/>
+  <text x="145" y="382" fill="#eef3ff" font-family="sans-serif" font-size="16">Run-Last-Again</text>
+  <rect x="120" y="418" width="260" height="48" rx="10" fill="#1a2438"/>
+  <text x="145" y="448" fill="#eef3ff" font-family="sans-serif" font-size="16">Mail Intake</text>
+  <rect x="440" y="140" width="1060" height="780" rx="16" fill="#0a101c"/>
+  <text x="480" y="200" fill="#9aa8c7" font-family="monospace" font-size="18">drop/ � routing � outputs/</text>
+  <text x="480" y="260" fill="#3ee0c2" font-family="monospace" font-size="20">[OK] Segment-5 detected � 142 rows</text>
+  <text x="480" y="310" fill="#5b8cff" font-family="monospace" font-size="20">[OK] Health � MySQL � Outlook � n8n</text>
+  <text x="480" y="360" fill="#ff8f6b" font-family="monospace" font-size="20">[WARN] 2 files waiting in drop/</text>
+  <rect x="480" y="420" width="960" height="14" rx="7" fill="#1a2438"/>
+  <rect x="480" y="420" width="720" height="14" rx="7" fill="url(#accent)"/>
+  <rect x="480" y="470" width="960" height="14" rx="7" fill="#1a2438"/>
+  <rect x="480" y="470" width="540" height="14" rx="7" fill="#5b8cff"/>
+  <rect x="480" y="560" width="440" height="280" rx="16" fill="#121a2b"/>
+  <text x="510" y="610" fill="#eef3ff" font-family="sans-serif" font-size="22" font-weight="700">Today</text>
+  <text x="510" y="670" fill="#3ee0c2" font-family="sans-serif" font-size="48" font-weight="700">18</text>
+  <text x="510" y="710" fill="#6b7a99" font-family="sans-serif" font-size="16">runs completed</text>
+  <rect x="960" y="560" width="440" height="280" rx="16" fill="#121a2b"/>
+  <text x="990" y="610" fill="#eef3ff" font-family="sans-serif" font-size="22" font-weight="700">Pipeline</text>
+  <text x="990" y="680" fill="#9aa8c7" font-family="monospace" font-size="16">Mail � Detect � Process � SQL</text>
+  <text x="990" y="730" fill="#3ee0c2" font-family="monospace" font-size="16">latency avg 1.4s</text>
+</svg>

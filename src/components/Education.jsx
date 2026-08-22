@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
-import { SectionTitle, Reveal } from './motion/Reveal'
+import { SectionTitle } from './motion/Reveal'
+import { ClipReveal } from './motion/ScrollFX'
 import { springStamp } from '../lib/motion'
 
 const Education = () => (
@@ -8,9 +9,9 @@ const Education = () => (
       <div className="mb-12">
         <SectionTitle label="Education" title="School" />
       </div>
-      <Reveal variant="fade">
+      <ClipReveal from="left" duration={0.82}>
         <motion.article
-          whileHover={{ y: -4 }}
+          whileHover={{ y: -4, rotate: -0.4 }}
           transition={springStamp}
           className="soft-panel max-w-3xl p-8 hover:shadow-2xl md:p-10"
         >
@@ -22,7 +23,7 @@ const Education = () => (
           </h3>
           <p className="mt-2 text-lg text-[var(--text-muted)]">JNTUH University, India</p>
         </motion.article>
-      </Reveal>
+      </ClipReveal>
     </div>
   </section>
 )

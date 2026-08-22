@@ -34,9 +34,10 @@ const CustomCursor = () => {
     setEnabled(true)
 
     const posNow = pos.current
+    let running = false
     const paint = () => {
-      posNow.rx += (posNow.x - posNow.rx) * 0.22
-      posNow.ry += (posNow.y - posNow.ry) * 0.22
+      posNow.rx += (posNow.x - posNow.rx) * 0.28
+      posNow.ry += (posNow.y - posNow.ry) * 0.28
 
       const dot = dotRef.current
       const ring = ringRef.current
@@ -46,9 +47,20 @@ const CustomCursor = () => {
       if (ring) {
         ring.style.transform = `translate3d(${posNow.rx}px, ${posNow.ry}px, 0) translate(-50%, -50%)`
       }
+
+      const settled = Math.abs(posNow.x - posNow.rx) < 0.15 && Math.abs(posNow.y - posNow.ry) < 0.15
+      if (settled) {
+        running = false
+        return
+      }
       rafRef.current = requestAnimationFrame(paint)
     }
-    rafRef.current = requestAnimationFrame(paint)
+
+    const kick = () => {
+      if (running) return
+      running = true
+      rafRef.current = requestAnimationFrame(paint)
+    }
 
     const show = () => {
       if (posNow.shown) return
@@ -73,6 +85,7 @@ const CustomCursor = () => {
         posNow.ry = e.clientY
       }
       show()
+      kick()
     }
 
     const onOver = (e) => {
@@ -98,7 +111,6 @@ const CustomCursor = () => {
     const onDown = () => setClickPulse((n) => n + 1)
 
     window.addEventListener('pointermove', onMove, { passive: true })
-    window.addEventListener('mousemove', onMove, { passive: true })
     window.addEventListener('pointerdown', onDown)
     document.addEventListener('mouseover', onOver)
     document.documentElement.addEventListener('mouseleave', hide)
@@ -108,7 +120,6 @@ const CustomCursor = () => {
       cancelAnimationFrame(rafRef.current)
       document.documentElement.classList.remove('crazy-cursor')
       window.removeEventListener('pointermove', onMove)
-      window.removeEventListener('mousemove', onMove)
       window.removeEventListener('pointerdown', onDown)
       document.removeEventListener('mouseover', onOver)
       document.documentElement.removeEventListener('mouseleave', hide)

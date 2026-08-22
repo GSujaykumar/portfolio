@@ -1,15 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
-import { motion, useScroll, useSpring, useReducedMotion, AnimatePresence } from 'framer-motion'
+import { motion, useReducedMotion, AnimatePresence } from 'framer-motion'
 import { springStamp, easeOut } from '../lib/motion'
 
 const ScrollProgress = () => {
-  const { scrollYProgress } = useScroll()
-  const scaleX = useSpring(scrollYProgress, { stiffness: 60, damping: 20, mass: 0.5 })
-
   return (
-    <motion.div
-      style={{ scaleX }}
-      className="scroll-progress-bar fixed left-0 right-0 top-0 z-[10000] h-[4px] origin-left"
+    <div
+      role="progressbar"
+      aria-label="Page scroll progress"
+      className="scroll-progress-bar pointer-events-none fixed left-0 top-0 z-[10000] h-[3px] w-full origin-left"
     />
   )
 }
@@ -19,18 +17,24 @@ export const IntroLoader = ({ onDone }) => {
   const [count, setCount] = useState(0)
   const [phase, setPhase] = useState('count') // count | slam | done
   const doneRef = useRef(false)
+  const onDoneRef = useRef(onDone)
+  onDoneRef.current = onDone
 
   const finish = () => {
     if (doneRef.current) return
     doneRef.current = true
     setPhase('slam')
-    setTimeout(() => onDone?.(), reduce ? 100 : 550)
+    setTimeout(() => onDoneRef.current?.(), reduce ? 80 : 400)
   }
 
   useEffect(() => {
+    const failsafe = setTimeout(finish, 1800)
     if (reduce) {
-      const t = setTimeout(finish, 150)
-      return () => clearTimeout(t)
+      const t = setTimeout(finish, 120)
+      return () => {
+        clearTimeout(t)
+        clearTimeout(failsafe)
+      }
     }
 
     let n = 0
@@ -40,7 +44,7 @@ export const IntroLoader = ({ onDone }) => {
         n = 100
         clearInterval(id)
         setCount(100)
-        setTimeout(finish, 120)
+        setTimeout(finish, 80)
         return
       }
       setCount(n)
@@ -57,9 +61,10 @@ export const IntroLoader = ({ onDone }) => {
     window.addEventListener('keydown', onKey)
     return () => {
       clearInterval(id)
+      clearTimeout(failsafe)
       window.removeEventListener('keydown', onKey)
     }
-  }, [onDone, reduce])
+  }, [reduce])
 
   return (
     <AnimatePresence>

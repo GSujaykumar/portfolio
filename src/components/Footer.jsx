@@ -1,24 +1,28 @@
 import { motion } from 'framer-motion'
 import { FaGithub, FaLinkedin } from 'react-icons/fa'
-import { SplitChars } from './motion/Reveal'
-import { springStamp, viewportOnce } from '../lib/motion'
+import { MaskReveal } from './motion/Reveal'
+import { SplitWords } from './motion/ScrollFX'
+import { easeOut, springStamp, viewportOnce } from '../lib/motion'
 
 const Footer = () => {
   return (
     <footer className="border-t border-[var(--line)] px-6 py-20">
       <motion.div
-        initial={{ y: 60, opacity: 0 }}
+        initial={{ y: 24, opacity: 0 }}
         whileInView={{ y: 0, opacity: 1 }}
         viewport={viewportOnce}
-        transition={springStamp}
+        transition={{ duration: 0.7, ease: easeOut }}
         className="mx-auto flex max-w-5xl flex-col items-center text-center"
       >
         <p className="font-display text-4xl uppercase tracking-tight text-[var(--ink)] md:text-6xl">
-          <SplitChars text="{ SUJAY }" />
+          <MaskReveal>{'{ SUJAY }'}</MaskReveal>
         </p>
-        <p className="mt-4 max-w-md text-sm text-[var(--text-muted)]">
-          Backend Java · Spring Boot · Oracle Fusion — built to ship, not just demo.
-        </p>
+        <SplitWords
+          as="p"
+          delay={0.1}
+          className="mt-4 max-w-md text-sm text-[var(--text-muted)]"
+          text="Backend Java · Spring Boot · Oracle Fusion — built to ship, not just demo."
+        />
 
         <div className="mt-8 flex gap-8 text-xs font-bold uppercase tracking-wider text-[var(--text-faint)]">
           <motion.a
@@ -26,7 +30,7 @@ const Footer = () => {
             target="_blank"
             rel="noopener noreferrer"
             data-cursor="go"
-            whileHover={{ y: -6, scale: 1.15, rotate: -6 }}
+            whileHover={{ y: -4 }}
             transition={springStamp}
           >
             GitHub
@@ -36,7 +40,7 @@ const Footer = () => {
             target="_blank"
             rel="noopener noreferrer"
             data-cursor="go"
-            whileHover={{ y: -6, scale: 1.15, rotate: 6 }}
+            whileHover={{ y: -4 }}
             transition={springStamp}
           >
             LinkedIn
@@ -44,7 +48,7 @@ const Footer = () => {
           <motion.a
             href="mailto:sujaykumargaddam18@gmail.com"
             data-cursor="mail"
-            whileHover={{ y: -6, scale: 1.15 }}
+            whileHover={{ y: -4 }}
             transition={springStamp}
           >
             Email
@@ -55,7 +59,7 @@ const Footer = () => {
           <motion.a
             href="https://github.com/GSujaykumar"
             aria-label="GitHub"
-            whileHover={{ scale: 1.3, rotate: -10 }}
+            whileHover={{ scale: 1.12 }}
             transition={springStamp}
           >
             <FaGithub size={22} />
@@ -63,7 +67,7 @@ const Footer = () => {
           <motion.a
             href="https://www.linkedin.com/in/sujaykumar-gaddam-a660693a0/"
             aria-label="LinkedIn"
-            whileHover={{ scale: 1.3, rotate: 10 }}
+            whileHover={{ scale: 1.12 }}
             transition={springStamp}
           >
             <FaLinkedin size={22} />

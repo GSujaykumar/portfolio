@@ -16,9 +16,10 @@ import {
   FaGithub,
   FaLinkedin,
   FaEnvelope,
-  FaFileLines,
+  FaFilePdf,
 } from 'react-icons/fa6'
 import { SectionTitle, Reveal, Stagger, StaggerItem } from './motion/Reveal'
+import { ClipReveal, ScrollFade } from './motion/ScrollFX'
 import { AnimatedCounter } from './WowExtras'
 import { toast } from './UxChrome'
 import { easeOut, springStamp, springSoft } from '../lib/motion'
@@ -233,9 +234,9 @@ export function ImpactShowcase() {
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {METRICS.map((m, i) => (
-            <Reveal key={m.label} delay={i * 0.06} variant="fade">
+            <ClipReveal key={m.label} delay={i * 0.07} from={i % 2 ? 'top' : 'bottom'}>
               <motion.div
-                whileHover={{ y: -6 }}
+                whileHover={{ y: -8, scale: 1.02 }}
                 transition={springStamp}
                 className="soft-panel p-6"
               >
@@ -244,7 +245,7 @@ export function ImpactShowcase() {
                 </p>
                 <p className="mt-2 text-sm text-[var(--text-muted)]">{m.label}</p>
               </motion.div>
-            </Reveal>
+            </ClipReveal>
           ))}
         </div>
       </div>
@@ -263,20 +264,22 @@ export function HighlightGrid() {
             subtitle="Not buzzwords — production systems operators and services rely on."
           />
         </div>
-        <Stagger className="grid gap-4 md:grid-cols-2" gap={0.08}>
-          {HIGHLIGHTS.map((h) => {
+        <Stagger className="grid gap-4 md:grid-cols-2" gap={0.1}>
+          {HIGHLIGHTS.map((h, i) => {
             const Icon = h.icon
             return (
               <StaggerItem key={h.title} variant="fade">
-                <SpotlightCard className="group soft-panel h-full p-6 md:p-7">
-                  <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-[color-mix(in_srgb,var(--signal)_14%,transparent)] text-[var(--signal)]">
-                    <Icon />
-                  </div>
-                  <h3 className="font-display text-xl text-[var(--ink)] md:text-2xl">{h.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[var(--text-muted)] md:text-base">
-                    {h.body}
-                  </p>
-                </SpotlightCard>
+                <ClipReveal delay={i * 0.08} from={i % 2 ? 'right' : 'left'}>
+                  <SpotlightCard className="group soft-panel h-full p-6 md:p-7">
+                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-[color-mix(in_srgb,var(--signal)_14%,transparent)] text-[var(--signal)]">
+                      <Icon />
+                    </div>
+                    <h3 className="font-display text-xl text-[var(--ink)] md:text-2xl">{h.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-[var(--text-muted)] md:text-base">
+                      {h.body}
+                    </p>
+                  </SpotlightCard>
+                </ClipReveal>
               </StaggerItem>
             )
           })}
@@ -307,9 +310,11 @@ export function TerminalShowcase() {
           </Magnetic>
         </div>
         <div className="lg:col-span-7">
-          <Reveal variant="fade">
-            <DevTerminal />
-          </Reveal>
+          <ScrollFade>
+            <Reveal variant="fade">
+              <DevTerminal />
+            </Reveal>
+          </ScrollFade>
         </div>
       </div>
     </section>
@@ -369,15 +374,16 @@ export function QuickDock() {
       href: '/Sujay-Kumar-Resume.pdf',
       label: 'Resume',
       download: 'Sujay-Kumar-Resume.pdf',
-      icon: FaFileLines,
-      fill: '#ff5a36',
+      icon: FaFilePdf,
+      fill: '#F40F02',
     },
     {
       id: 'github',
       href: 'https://github.com/GSujaykumar',
       label: 'GitHub',
       icon: FaGithub,
-      fill: '#181717',
+      fill: '#24292F',
+      rest: 'var(--ink)',
     },
     {
       id: 'linkedin',
@@ -391,59 +397,104 @@ export function QuickDock() {
       href: 'mailto:sujaykumargaddam18@gmail.com',
       label: 'Email',
       icon: FaEnvelope,
-      fill: '#00b894',
+      fill: '#EA4335',
     },
   ]
 
   return (
     <motion.div
-      initial={reduce ? false : { opacity: 0, x: 20 }}
+      initial={reduce ? false : { opacity: 0, x: 28 }}
       animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: 1.1, duration: 0.5, ease: easeOut }}
-      className="fixed right-3 top-1/2 z-40 hidden -translate-y-1/2 flex-col items-end gap-2 lg:flex"
+      transition={{ delay: 1.05, duration: 0.5, ease: easeOut }}
+      className="social-dock fixed right-3 top-1/2 z-40 hidden -translate-y-1/2 flex-col items-end gap-3 lg:flex"
     >
       {links.map((l, i) => {
         const Icon = l.icon
         const open = hovered === l.id
         return (
-          <motion.div
-            key={l.id}
-            initial={reduce ? false : { opacity: 0, x: 16 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 1.15 + i * 0.08, duration: 0.45, ease: easeOut }}
-          >
-            <motion.a
-              href={l.href}
-              download={l.download}
-              target={l.href.startsWith('http') ? '_blank' : undefined}
-              rel={l.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-              data-cursor="go"
-              aria-label={l.label}
-              title={l.label}
-              animate={{
-                width: open ? 132 : 44,
-                backgroundColor: open ? l.fill : 'var(--bg-elevated)',
-                color: open ? '#fff' : 'var(--ink)',
-              }}
-              transition={springStamp}
-              onHoverStart={() => setHovered(l.id)}
-              onHoverEnd={() => setHovered(null)}
-              onFocus={() => setHovered(l.id)}
-              onBlur={() => setHovered(null)}
-              className="flex h-11 w-11 overflow-hidden rounded-full border border-[var(--line)] shadow-md backdrop-blur-md"
+          <Magnetic key={l.id} strength={0.28}>
+            <div
+              className="social-dock__item"
+              style={{ animationDelay: `${i * 0.2}s` }}
+              onPointerEnter={() => setHovered(l.id)}
+              onPointerLeave={() => setHovered(null)}
             >
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center">
-                <Icon size={16} />
-              </span>
-              <span
-                className={`flex items-center whitespace-nowrap pr-4 text-[11px] font-bold uppercase tracking-[0.12em] transition-opacity duration-200 ${
-                  open ? 'opacity-100' : 'opacity-0'
-                }`}
+              <motion.div
+                initial={reduce ? false : { opacity: 0, x: 22, scale: 0.8 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                transition={{ delay: 1.1 + i * 0.09, ...(reduce ? { duration: 0.3 } : springStamp) }}
               >
-                {l.label}
-              </span>
-            </motion.a>
-          </motion.div>
+              <motion.a
+                href={l.href}
+                download={l.download}
+                target={l.href.startsWith('http') ? '_blank' : undefined}
+                rel={l.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                data-cursor="go"
+                aria-label={l.label}
+                className={`social-dock__btn relative flex h-12 rounded-full border ${open ? 'is-open' : ''}`}
+                style={{ '--dock-fill': l.fill, originX: 1, originY: 0.5 }}
+                data-brand={l.id}
+                animate={
+                  reduce
+                    ? {
+                        width: open ? 148 : 48,
+                        backgroundColor: open
+                          ? l.fill
+                          : 'color-mix(in srgb, var(--dock-fill) 18%, var(--bg-elevated))',
+                        color: open ? '#ffffff' : l.rest || l.fill,
+                        borderColor: open
+                          ? l.fill
+                          : 'color-mix(in srgb, var(--dock-fill) 58%, var(--line))',
+                      }
+                    : {
+                        width: open ? 156 : 48,
+                        scale: open ? 1.18 : 1,
+                        backgroundColor: open
+                          ? l.fill
+                          : 'color-mix(in srgb, var(--dock-fill) 18%, var(--bg-elevated))',
+                        color: open ? '#ffffff' : l.rest || l.fill,
+                        borderColor: open
+                          ? l.fill
+                          : 'color-mix(in srgb, var(--dock-fill) 58%, var(--line))',
+                        boxShadow: open
+                          ? `0 0 0 4px color-mix(in srgb, ${l.fill} 22%, transparent), 0 16px 36px color-mix(in srgb, ${l.fill} 48%, transparent)`
+                          : `0 8px 20px color-mix(in srgb, ${l.fill} 18%, transparent)`,
+                      }
+                }
+                transition={reduce ? { duration: 0.2 } : springStamp}
+                onFocus={() => setHovered(l.id)}
+                onBlur={() => setHovered(null)}
+                whileTap={reduce ? undefined : { scale: 0.94 }}
+              >
+                <span className="social-dock__clip relative z-[1] flex h-12 w-full overflow-hidden rounded-full">
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center">
+                    <motion.span
+                      animate={
+                        reduce
+                          ? { scale: 1, rotate: 0 }
+                          : open
+                            ? { rotate: [0, -18, 14, -6, 0], scale: [1, 1.28, 1.12] }
+                            : { rotate: 0, scale: 1 }
+                      }
+                      transition={{ duration: 0.55, ease: 'easeInOut' }}
+                      className="grid place-items-center text-[1.15rem]"
+                    >
+                      <Icon />
+                    </motion.span>
+                  </span>
+                  <span
+                    className={`flex items-center whitespace-nowrap pr-4 text-[11px] font-bold uppercase tracking-[0.14em] transition-opacity duration-200 ${
+                      open ? 'opacity-100' : 'opacity-0'
+                    }`}
+                  >
+                    {l.label}
+                  </span>
+                </span>
+                <span aria-hidden className="social-dock__shine" />
+              </motion.a>
+              </motion.div>
+            </div>
+          </Magnetic>
         )
       })}
     </motion.div>

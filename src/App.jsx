@@ -13,84 +13,57 @@ import Footer from './components/Footer'
 import ScrollProgress, { IntroLoader } from './components/ScrollProgress'
 import CommandPalette from './components/Distinctives'
 import CustomCursor from './components/CustomCursor'
-import SmoothScroll from './components/SmoothScroll'
-import WorldScroll from './components/WorldScroll'
+import SmoothScroll, { refreshLenis } from './components/SmoothScroll'
 import ScrollExtras from './components/ScrollExtras'
 import UxChrome from './components/UxChrome'
 import EasterEgg from './components/EasterEgg'
-import { TechMarquee } from './components/WowExtras'
+import RobotGreeting from './components/RobotGreeting'
 import {
   ImpactShowcase,
   HighlightGrid,
   TerminalShowcase,
   QuickDock,
 } from './components/ShowcaseExtras'
-import { springStamp, easeOut } from './lib/motion'
+import { easeOut } from './lib/motion'
+import { GREET_REPLAY_EVENT, hasSeenGreeting } from './lib/greeting'
 
 const GuideRobot = lazy(() => import('./components/GuideRobot'))
+const SceneWorld = lazy(() => import('./components/SceneWorld'))
 
 function TourGuide() {
   const reduce = useReducedMotion()
-  const [enabled, setEnabled] = useState(false)
-
-  useEffect(() => {
-    try {
-      setEnabled(localStorage.getItem('portfolio-guide') === '1')
-    } catch {
-      setEnabled(false)
-    }
-  }, [])
-
   if (reduce) return null
-
-  if (!enabled) {
-    return (
-      <motion.button
-        type="button"
-        aria-label="Enable tour guide"
-        data-cursor="go"
-        onClick={() => {
-          try {
-            localStorage.setItem('portfolio-guide', '1')
-          } catch {
-            /* ignore */
-          }
-          setEnabled(true)
-        }}
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        whileHover={{ scale: 1.05, y: -2 }}
-        whileTap={{ scale: 0.96 }}
-        transition={{ duration: 0.35, ease: easeOut }}
-        className="fixed bottom-5 left-5 z-50 inline-flex items-center gap-2 rounded-full border-2 border-[var(--ink)] bg-[var(--bg-elevated)] px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--ink)] shadow-lg md:bottom-8 md:left-8"
-      >
-        <span className="relative flex h-2 w-2">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--signal)] opacity-60" />
-          <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--signal)]" />
-        </span>
-        Meet your guide
-      </motion.button>
-    )
-  }
 
   return (
     <Suspense fallback={null}>
-      <GuideRobot
-        onDismiss={() => {
-          try {
-            localStorage.setItem('portfolio-guide', '0')
-          } catch {
-            /* ignore */
-          }
-          setEnabled(false)
-        }}
-      />
+      <GuideRobot />
     </Suspense>
   )
 }
 
 function App() {
   const [booting, setBooting] = useState(true)
+  const [greeting, setGreeting] = useState(() => !hasSeenGreeting())
+  const playGreet = !booting && greeting
+  const live = !booting && !greeting
+
+  useEffect(() => {
+    const boot = window.setTimeout(() => setBooting(false), 2200)
+    const greet = window.setTimeout(() => setGreeting(false), 9000)
+    return () => {
+      window.clearTimeout(boot)
+      window.clearTimeout(greet)
+    }
+  }, [])
+
+  useEffect(() => {
+    const replay = () => {
+      window.scrollTo(0, 0)
+      setGreeting(true)
+    }
+    window.addEventListener(GREET_REPLAY_EVENT, replay)
+    return () => window.removeEventListener(GREET_REPLAY_EVENT, replay)
+  }, [])
 
   return (
     <div className="relative min-h-screen bg-[var(--bg)] text-[var(--text)] selection:bg-[var(--ink)] selection:text-[var(--bg)]">
@@ -99,37 +72,56 @@ function App() {
         <span className="aurora__blob" />
         <span className="aurora__blob" />
       </div>
+      <Suspense fallback={null}>
+        <SceneWorld />
+      </Suspense>
       <SmoothScroll />
-      <WorldScroll />
       <AnimatePresence mode="wait">
-        {booting && <IntroLoader key="intro" onDone={() => setBooting(false)} />}
+        {booting && (
+          <IntroLoader
+            key="intro"
+            onDone={() => {
+              setBooting(false)
+              requestAnimationFrame(() => refreshLenis())
+            }}
+          />
+        )}
       </AnimatePresence>
       <ScrollProgress />
       <CustomCursor />
       <CommandPalette />
-      {!booting && <UxChrome />}
-      {!booting && <ScrollExtras />}
-      {!booting && <QuickDock />}
-      {!booting && <EasterEgg />}
-      {!booting && <TourGuide />}
+      {playGreet && (
+        <RobotGreeting
+          onDone={() => {
+            setGreeting(false)
+            requestAnimationFrame(() => refreshLenis())
+          }}
+        />
+      )}
+      {live && <UxChrome />}
+      {live && <ScrollExtras />}
+      {live && <QuickDock />}
+      {live && <EasterEgg />}
+      {live && <TourGuide />}
 
       <Navbar />
 
       <motion.div
         className="relative z-10"
-        initial={{ opacity: 0, y: 40 }}
-        animate={booting ? { opacity: 0, y: 40 } : { opacity: 1, y: 0 }}
-        transition={springStamp}
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.55, ease: easeOut }}
       >
-        <Hero />
+        <div className="world-stage">
+          <Hero />
+        </div>
       </motion.div>
 
       {/* Keep Projects out of any CSS transform (sticky pin). Always mount so #work exists. */}
       <Projects />
 
       {/* z-20 so Skills / Resume / Contact paint above a leftover Projects pin */}
-      <div className="relative z-20 bg-[var(--bg)]">
-        <TechMarquee />
+      <div className="relative z-20 bg-[color-mix(in_srgb,var(--bg)_78%,transparent)]">
         <ImpactShowcase />
         <HighlightGrid />
         <About />

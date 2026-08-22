@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="750" viewBox="0 0 1200 750" fill="none">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#3ee0c2"/>
+      <stop offset="100%" stop-color="#5b8cff"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="750" fill="#0a1220"/>
+  <rect x="40" y="40" width="1120" height="670" rx="20" fill="#0e1524"/>
+  <text x="70" y="100" fill="#3ee0c2" font-family="sans-serif" font-size="24" font-weight="700">Daily Collection Checker</text>
+  <text x="70" y="140" fill="#6b7a99" font-family="monospace" font-size="14">Scheduler � MySQL � Teams alerts</text>
+  <polyline points="100,520 220,460 340,480 460,390 580,410 700,300 820,340 940,250 1060,280" fill="none" stroke="url(#g)" stroke-width="5"/>
+  <circle cx="1060" cy="280" r="10" fill="#3ee0c2"/>
+  <rect x="70" y="560" width="340" height="100" rx="14" fill="#121a2b"/>
+  <text x="100" y="620" fill="#eef3ff" font-family="sans-serif" font-size="20">Status: HEALTHY</text>
+  <rect x="430" y="560" width="340" height="100" rx="14" fill="#121a2b"/>
+  <text x="460" y="620" fill="#5b8cff" font-family="sans-serif" font-size="20">Teams: notified</text>
+  <rect x="790" y="560" width="330" height="100" rx="14" fill="#121a2b"/>
+  <text x="820" y="620" fill="#ff8f6b" font-family="sans-serif" font-size="20">Last run: 06:00</text>
+</svg>

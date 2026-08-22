@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
+import { useEffect, useState } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
 import {
   fadeUp,
   flipIn,
@@ -10,7 +10,7 @@ import {
   stagger,
   wipeX,
   viewportOnce,
-  springStamp,
+  viewportReveal,
   easeOut,
 } from '../../lib/motion'
 
@@ -27,27 +27,17 @@ export function Reveal({ children, className = '', delay = 0, variant = 'fade', 
   const reduce = useReducedMotion()
   const Comp = motion[as] || motion.div
   const variants = VARIANT_MAP[variant] || fadeUp
-  const [forceShow, setForceShow] = useState(false)
-
-  useEffect(() => {
-    const t = window.setTimeout(() => setForceShow(true), 1600)
-    return () => window.clearTimeout(t)
-  }, [])
 
   if (reduce) return <div className={className}>{children}</div>
 
   return (
     <Comp
-      className={className}
+      className={`gpu-layer ${className}`.trim()}
       variants={variants}
       initial="hidden"
-      animate={forceShow ? 'show' : undefined}
       whileInView="show"
-      viewport={viewportOnce}
-      // delay only — do not override variant transition (that broke reveals)
-      custom={delay}
-      transition={{ delay }}
-      style={variant === 'flip' ? { transformStyle: 'preserve-3d', perspective: 900 } : undefined}
+      viewport={viewportReveal}
+      transition={{ ...(variants.show?.transition || {}), delay }}
     >
       {children}
     </Comp>
@@ -64,7 +54,7 @@ export function Stagger({ children, className = '', gap = 0.07, delay = 0.04 }) 
       variants={stagger(gap, delay)}
       initial="hidden"
       whileInView="show"
-      viewport={viewportOnce}
+      viewport={viewportReveal}
     >
       {children}
     </motion.div>
@@ -91,11 +81,11 @@ export function MaskReveal({ children, className = '', delay = 0 }) {
   return (
     <span className="block overflow-hidden pb-[0.12em]">
       <motion.span
-        className={`block ${className}`}
-        initial={{ y: '120%', rotate: 6, skewY: 4, opacity: 0 }}
-        whileInView={{ y: '0%', rotate: 0, skewY: 0, opacity: 1 }}
-        viewport={viewportOnce}
-        transition={{ duration: 0.95, ease: easeOut, delay }}
+        className={`block gpu-layer ${className}`}
+        initial={{ y: '112%', opacity: 0 }}
+        whileInView={{ y: '0%', opacity: 1 }}
+        viewport={viewportReveal}
+        transition={{ duration: 0.72, ease: easeOut, delay }}
       >
         {children}
       </motion.span>
@@ -118,7 +108,7 @@ export function SplitChars({ text, className = '', delay = 0, once = false }) {
     <motion.span
       className={`inline-flex flex-wrap justify-center ${className}`}
       aria-label={text}
-      variants={stagger(0.04, delay)}
+      variants={stagger(0.018, delay)}
       initial="hidden"
       {...trigger}
     >
@@ -235,37 +225,27 @@ export function Typewriter({
 }
 
 export function SectionTitle({ label, title, subtitle, center = false }) {
-  const reduce = useReducedMotion()
-  const ref = useRef(null)
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start'],
-  })
-  const drift = useTransform(scrollYProgress, [0, 1], [32, -48])
-  const rotate = useTransform(scrollYProgress, [0, 1], [-1.5, 2.5])
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.96, 1.04, 0.98])
   const watermark = typeof title === 'string' ? title : label
 
   return (
-    <div ref={ref} className={`relative ${center ? 'text-center' : ''}`}>
+    <div className={`relative ${center ? 'text-center' : ''}`}>
       {watermark && (
-        <motion.span
+        <span
           aria-hidden
-          style={reduce ? undefined : { y: drift, rotate, scale }}
-          className={`pointer-events-none absolute -top-8 select-none font-display text-[clamp(4rem,14vw,8rem)] uppercase leading-none tracking-tighter text-transparent [-webkit-text-stroke:1px_color-mix(in_srgb,var(--signal)_35%,transparent)] ${
+          className={`pointer-events-none absolute -top-8 select-none font-display text-[clamp(4rem,14vw,8rem)] uppercase leading-none tracking-tighter text-transparent [-webkit-text-stroke:1px_color-mix(in_srgb,var(--signal)_28%,transparent)] ${
             center ? 'left-1/2 -translate-x-1/2' : 'left-0'
           }`}
         >
           {watermark}
-        </motion.span>
+        </span>
       )}
 
       {label && (
         <motion.div
-          initial={{ opacity: 0, x: -16 }}
+          initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={viewportOnce}
-          transition={{ duration: 0.55, ease: easeOut }}
+          transition={{ duration: 0.5, ease: easeOut }}
           className={`relative mb-6 inline-flex items-center gap-3 ${center ? 'mx-auto' : ''}`}
         >
           <span className="h-px w-8 bg-[var(--signal)]" />
@@ -287,10 +267,10 @@ export function SectionTitle({ label, title, subtitle, center = false }) {
       </MaskReveal>
 
       <motion.div
-        initial={{ scaleX: 0, rotate: -4 }}
-        whileInView={{ scaleX: 1, rotate: 0 }}
+        initial={{ scaleX: 0 }}
+        whileInView={{ scaleX: 1 }}
         viewport={viewportOnce}
-        transition={{ duration: 0.75, ease: easeOut, delay: 0.25 }}
+        transition={{ duration: 0.7, ease: easeOut, delay: 0.18 }}
         className={`mt-6 h-[4px] w-28 origin-left bg-gradient-to-r from-[var(--signal)] via-[var(--hot)] to-transparent ${
           center ? 'mx-auto' : ''
         }`}
@@ -298,10 +278,10 @@ export function SectionTitle({ label, title, subtitle, center = false }) {
 
       {subtitle && (
         <motion.p
-          initial={{ opacity: 0, y: 28, filter: 'blur(8px)' }}
-          whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={viewportOnce}
-          transition={{ duration: 0.65, ease: easeOut, delay: 0.28 }}
+          transition={{ duration: 0.58, ease: easeOut, delay: 0.22 }}
           className={`relative mt-5 max-w-xl text-base text-[var(--text-muted)] md:text-lg ${
             center ? 'mx-auto' : ''
           }`}
@@ -330,4 +310,4 @@ export function Marquee({ items, reverse = false, className = '' }) {
   )
 }
 
-export { springStamp, easeOut }
+export { easeOut }

@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" fill="none">
+  <rect width="1600" height="1000" fill="#eef1f4"/>
+  <rect x="60" y="50" width="1480" height="900" rx="24" fill="#ffffff" stroke="#d0d5dd"/>
+
+  <text x="100" y="120" fill="#0e1116" font-family="Georgia, serif" font-size="36" font-weight="700">Resilient Integration Hub</text>
+  <text x="100" y="165" fill="#5a6270" font-family="monospace" font-size="16">Resilience4j � Redis rate limiting � Response cache</text>
+
+  <!-- Caller -->
+  <rect x="100" y="220" width="220" height="200" rx="16" fill="#0e1116"/>
+  <text x="124" y="262" fill="#c8f542" font-family="sans-serif" font-size="19" font-weight="700">Callers</text>
+  <text x="124" y="298" fill="#ffffff" font-family="monospace" font-size="13">internal services</text>
+  <text x="124" y="326" fill="#ffffff" font-family="monospace" font-size="13">batch jobs</text>
+  <text x="124" y="354" fill="#ffffff" font-family="monospace" font-size="13">ops scripts</text>
+  <text x="124" y="394" fill="#8b93a1" font-family="monospace" font-size="12">one contract, many targets</text>
+
+  <path d="M320 320 L390 320" stroke="#0e1116" stroke-width="3"/>
+  <path d="M382 312 L394 320 L382 328 Z" fill="#0e1116"/>
+
+  <!-- Hub pipeline -->
+  <rect x="400" y="200" width="700" height="240" rx="16" fill="#c8f542"/>
+  <text x="424" y="240" fill="#0e1116" font-family="sans-serif" font-size="20" font-weight="700">Integration Hub</text>
+
+  <rect x="424" y="262" width="150" height="70" rx="10" fill="#0e1116"/>
+  <text x="444" y="292" fill="#c8f542" font-family="monospace" font-size="13" font-weight="700">rate limit</text>
+  <text x="444" y="315" fill="#ffffff" font-family="monospace" font-size="11">Redis window</text>
+
+  <rect x="590" y="262" width="150" height="70" rx="10" fill="#0e1116"/>
+  <text x="610" y="292" fill="#c8f542" font-family="monospace" font-size="13" font-weight="700">cache</text>
+  <text x="610" y="315" fill="#ffffff" font-family="monospace" font-size="11">Redis TTL</text>
+
+  <rect x="756" y="262" width="150" height="70" rx="10" fill="#0e1116"/>
+  <text x="776" y="292" fill="#c8f542" font-family="monospace" font-size="13" font-weight="700">breaker</text>
+  <text x="776" y="315" fill="#ffffff" font-family="monospace" font-size="11">half-open probe</text>
+
+  <rect x="922" y="262" width="150" height="70" rx="10" fill="#0e1116"/>
+  <text x="942" y="292" fill="#c8f542" font-family="monospace" font-size="13" font-weight="700">retry</text>
+  <text x="942" y="315" fill="#ffffff" font-family="monospace" font-size="11">jittered backoff</text>
+
+  <text x="424" y="378" fill="#0e1116" font-family="monospace" font-size="14">Timeout budget enforced per hop  a slow dependency never</text>
+  <text x="424" y="406" fill="#0e1116" font-family="monospace" font-size="14">becomes a thread leak in the caller.</text>
+
+  <path d="M1100 320 L1170 320" stroke="#0e1116" stroke-width="3"/>
+  <path d="M1162 312 L1174 320 L1162 328 Z" fill="#0e1116"/>
+
+  <!-- Downstream -->
+  <rect x="1180" y="220" width="280" height="200" rx="16" fill="#f5f6f8" stroke="#0e1116" stroke-width="2"/>
+  <text x="1204" y="262" fill="#0e1116" font-family="sans-serif" font-size="19" font-weight="700">Downstream APIs</text>
+  <text x="1204" y="298" fill="#5a6270" font-family="monospace" font-size="13">flaky � rate limited</text>
+  <text x="1204" y="326" fill="#5a6270" font-family="monospace" font-size="13">slow � sometimes down</text>
+  <text x="1204" y="366" fill="#5a6270" font-family="monospace" font-size="13">partner + vendor systems</text>
+
+  <!-- Circuit states -->
+  <rect x="100" y="475" width="1360" height="180" rx="16" fill="#f5f6f8" stroke="#d0d5dd"/>
+  <text x="140" y="515" fill="#0e1116" font-family="sans-serif" font-size="19" font-weight="700">Circuit breaker states</text>
+
+  <circle cx="200" cy="580" r="26" fill="#0e1116"/>
+  <text x="240" y="574" fill="#0e1116" font-family="monospace" font-size="15" font-weight="700">CLOSED</text>
+  <text x="240" y="600" fill="#5a6270" font-family="monospace" font-size="13">traffic flows, failures counted</text>
+
+  <circle cx="620" cy="580" r="26" fill="#ffffff" stroke="#0e1116" stroke-width="4"/>
+  <text x="660" y="574" fill="#0e1116" font-family="monospace" font-size="15" font-weight="700">OPEN</text>
+  <text x="660" y="600" fill="#5a6270" font-family="monospace" font-size="13">fail fast, fallback served</text>
+
+  <circle cx="1040" cy="580" r="26" fill="#c8f542" stroke="#0e1116" stroke-width="4"/>
+  <text x="1080" y="574" fill="#0e1116" font-family="monospace" font-size="15" font-weight="700">HALF-OPEN</text>
+  <text x="1080" y="600" fill="#5a6270" font-family="monospace" font-size="13">probe before full recovery</text>
+
+  <!-- Footer -->
+  <rect x="100" y="690" width="1360" height="170" rx="16" fill="#0e1116"/>
+  <text x="140" y="736" fill="#c8f542" font-family="monospace" font-size="17">Java 17 � Spring Boot 3.5 � Resilience4j � Redis � WireMock</text>
+  <text x="140" y="774" fill="#ffffff" font-family="monospace" font-size="17">Failure-injection tests prove the breaker opens and recovers</text>
+  <text x="140" y="812" fill="#ffffff" font-family="monospace" font-size="17">Structured failure reports � Micrometer metrics per dependency</text>
+  <text x="140" y="846" fill="#8b93a1" font-family="monospace" font-size="15">Testcontainers Redis � GitHub Actions CI � Docker Compose</text>
+</svg>
